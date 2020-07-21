@@ -17,17 +17,17 @@ import { Lazyload } from 'vant';
 import VueWechatTitle from 'vue-wechat-title'; // title动态切换
 import VueClipboard from 'vue-clipboard2'; // 复制到粘贴板
 
-
-// import VueCookie from 'vue-cookie'; // api: https://github.com/alfhen/vue-cookie
-// import globalVarable from '@/core/global_variable.js';
+import VueCookies from 'vue-cookies'; // api: https://github.com/cmp-cc/vue-cookies
+import MyAxios from '@/core/Axios.js';
 // import $ from 'jquery'; // 引入jquery
 // import Ajax from '@/core/Ajax.js';
-// import MyAxios from '@/core/Axios.js';
+import globalVarable from '@/core/global_variable.js';
 
-// Vue.prototype.GLOBAL = globalVarable;
-// Vue.prototype.MyAxios = MyAxios;
+Vue.prototype.GLOBAL = globalVarable;
+Vue.prototype.VueCookies = VueCookies;
+Vue.prototype.MyAxios = MyAxios;
+
 // Vue.prototype.Ajax = Ajax;
-// Vue.prototype.VueCookie = VueCookie;
 
 Vue.config.productionTip = false;
 Vue.use(Vant);
@@ -35,7 +35,7 @@ Vue.use(VueAwesomeSwiper);
 Vue.use(Lazyload);
 Vue.use(VueWechatTitle);
 Vue.use(VueClipboard)
-// Vue.use(VueCookie);
+Vue.use(VueCookies);
 
 // Vue.prototype.authToken = function (type){
 //   this.MyAxios.post("/client/authToken", {}).then(data => {

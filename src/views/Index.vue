@@ -255,6 +255,9 @@
 			}
 		},
 		components: {},
+		mounted(){
+
+		},
 		methods:{
 			toNoticeDetail(){
 				this.$router.push("/data");
