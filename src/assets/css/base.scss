@@ -3,7 +3,7 @@
 * @Email: dxxtalking@163.com
 * @Date:   2020-07-14 13:29:54
 * @Last Modified by:   dxx
-* @Last Modified time: 2020-07-20 15:57:28
+* @Last Modified time: 2020-07-21 18:05:54
 */
 @charset "UTF-8";
 /*css 初始化 */
@@ -1104,6 +1104,14 @@ h1,h2,h3,h4,h5,h6{
       }
       .item_heading .van-image img{
         border-radius:4px;
+      }
+      .item_heading .van-image{
+        .new_pro{
+          position: absolute;
+          top: 0;
+          left: 0;
+          border-radius: 4px 999px 999px 0;
+        }
       }
       .item_heading .van-button{
         font-size:14px;
