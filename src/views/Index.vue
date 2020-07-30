@@ -4,8 +4,8 @@
 		<van-swipe class="my-swipe" 
 			:autoplay="6000" 
 			indicator-color="white">
-			<van-swipe-item v-for="(image, index) in swipeImages" :key="index">
-		    <img v-lazy="image"/>
+			<van-swipe-item v-for="(image, index) in swipeImages" :key="index" @click="bannerClick(image)">
+		    <img v-lazy="image.bannerimage"/>
 		  </van-swipe-item>
 		</van-swipe>
 
@@ -13,9 +13,7 @@
 		<van-notice-bar class="mt-3 border-radius-4" 
 			color="#fff" 
 			background="#24262E" 
-			:scrollable="false" 
-			mode="link"
-			@click="toNoticeDetail">
+			:scrollable="false">
 			<template #left-icon>
 				<div class="notice_icon">
 					<van-image width="22" height="22" fit="contain" :src="require('@/assets/images/notice_icon.png')" />
@@ -26,7 +24,12 @@
 		    class="notice-swipe"
 		    :autoplay="3000"
 		    :show-indicators="false">
-		    <van-swipe-item v-for="(notice,index) in swipeNotice" :key="index" class="fs_14 text-truncate font-weight-normal">{{notice.title}}</van-swipe-item>
+		    <van-swipe-item v-for="(notice,index) in swipeNotice" :key="index" class="fs_14 text-truncate font-weight-normal" @click="toNoticeDetail(notice)">
+		    	<div class="d-flex justify-content-between align-items-center">	    	
+		    		{{notice.title}}
+		    		<i class="van-icon van-icon-arrow van-notice-bar__right-icon"></i>
+		    	</div>	
+		  	</van-swipe-item>
 		  </van-swipe>
 		</van-notice-bar>
 
@@ -192,16 +195,40 @@
 		},
 		components: {},
 		mounted(){
+			// banner展示列表
+			this.indexBanner();
 			// 公告列表
 			this.indexNoticeList();
 			// 产品列表分类
 			this.loadProCate();
 		},
 		methods:{
+			// banner展示列表
+			indexBanner(){
+				this.MyAxios.post("/api/wechat/banner/index",{
+
+				}).then(data => {
+					if (data.code == 0) {
+						this.swipeImages = data.data;
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
+			},
+			// banner点击事件
+			bannerClick(item){
+				if(item.type==2){ //作为链接跳转
+					window.location = item.url;
+				}else{
+					console.log("跳转到banner详情");
+				}
+			},
 			// 公告列表
 			indexNoticeList(){
 				this.MyAxios.post("/api/wechat/notice/index",{
-
 				}).then(data => {
 					if (data.code == 0) {
 						this.swipeNotice = data.data;
@@ -214,9 +241,8 @@
 				})
 			},
 			// 公告详细页面
-			toNoticeDetail(){
-				console.log("去到公告详细页面");
-				this.$router.push("/data");
+			toNoticeDetail(notice){
+				this.$router.push("/NoticeDetail?id="+notice.id);
 			},
 			
 			// 产品列表分类
@@ -225,6 +251,7 @@
 					page:this.pagePro,
 					cate_id:this.proActive,
 				}).then(data => {
+					//console.log(data);
 					if (data.code == 0) {
 						// 分类
 						this.tabCard = data.data.cate_list;

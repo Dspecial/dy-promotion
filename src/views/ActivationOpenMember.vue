@@ -1,8 +1,8 @@
 <template>
 	<div class="page-container">
 		<section class="text-center">
-			<van-image round width="60" height="60" :src="avatarUrl" />
-			<p class="m-0 mt-2 fs_16 font-weight-normal">{{name}}</p>
+			<van-image round width="60" height="60" :src="profile.avatar" />
+			<p class="m-0 mt-2 fs_16 font-weight-normal">{{profile.name}}</p>
 		</section>
 		<!-- 激活码 -->
 		<section class="mt-3 bg_yellow-200 border-radius-4 p-3">
@@ -11,7 +11,7 @@
 				<p class="fs_16 m-0 mt-3">请输入财源广进卡激活码：</p>
 			  <van-field
 			  	class="mt-3"
-			    v-model="username"
+			    v-model="active_code"
 			    name="招财进宝卡激活码"
 			    placeholder="请输入招财进宝卡激活码"
 			    :rules="[{ required: true, message: '请填写招财进宝卡激活码' }]"
@@ -27,17 +27,17 @@
 格为298元！</p>
 
 		<!-- 负责人 -->
-		<section class="bg_dark-400 official mt-3">
+		<section class="bg_dark-400 official mt-3" v-if="profile.is_vip == 2">
 			<div class="d-flex justify-content-between align-items-center p-3">
 				<div class="d-flex align-items-center">
-					<van-image round width="45" height="45" :src="directorUrl" />
+					<van-image round width="45" height="45" :src="director.avatar" />
 					<div class="ml-3">
-						<h4 class="fs_18 m-0">{{directorWechat}}</h4>
+						<h4 class="fs_18 m-0">{{director.name}}</h4>
 						<p class="m-0 fs_12 mt-1 opacity-40">遇到问题加微信咨询我哦</p>
 					</div>
 				</div>
 				<van-button color="#FE2C58" 
-					v-clipboard:copy="directorWechat"
+					v-clipboard:copy="director.wx_name"
       		v-clipboard:success="onCopy"
       		v-clipboard:error="onError">联系他</van-button>
 			</div>
@@ -58,16 +58,44 @@
 		name: 'ActivationOpenMember',
 		data () {
 			return {
-				avatarUrl:"https://img.yzcdn.cn/vant/cat.jpeg",
-				name:"片刻安静",
-				username: '',
-
-				directorUrl:"https://img.yzcdn.cn/vant/apple-2.jpg",
-				directorWechat:"负责人微信",
+				// 个人信息
+				profile:{
+					name: "片刻安静",  //微信昵称
+					avatar: "https://img.yzcdn.cn/vant/cat.jpeg", //头像
+					wx_name: "piankeanjingsss",  //微信名
+				},
+				// 负责人
+				director:{
+					avatar: "https://img.yzcdn.cn/vant/cat.jpeg",
+					name: "李王",
+					wx_name: "liwang"
+				},
+				// 激活码
+				active_code: '',
 			}
 		},
 		components: {},
+		mounted(){
+			this.onLoad();
+		},
 		methods:{
+			// 获取个人信息
+			onLoad(){
+				this.MyAxios.post("/api/wechat/user/index",{
+
+				}).then(data => {
+					console.log(data);
+					if (data.code == 0) {
+						this.profile = data.data.customer_info;
+						this.director = data.data.agent_info;
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
+			},
 			// 提交激活码
 			onSubmit(values) {
 	      console.log('submit', values);

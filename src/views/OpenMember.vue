@@ -4,14 +4,14 @@
 		<section class="bg_dark-400 official">
 			<div class="d-flex justify-content-between align-items-center p-3">
 				<div class="d-flex align-items-center">
-					<van-image round width="45" height="45" :src="directorUrl" />
+					<van-image round width="45" height="45" :src="director.avatar" />
 					<div class="ml-3">
-						<h4 class="fs_18 m-0">{{directorWechat}}</h4>
+						<h4 class="fs_18 m-0">{{director.name}}</h4>
 						<p class="m-0 fs_12 mt-1 opacity-40">遇到问题加微信咨询我哦</p>
 					</div>
 				</div>
 				<van-button color="#FE2C58" 
-					v-clipboard:copy="directorWechat"
+					v-clipboard:copy="director.wx_name"
       		v-clipboard:success="onCopy"
       		v-clipboard:error="onError">联系他</van-button>
 			</div>
@@ -80,12 +80,17 @@
 				  </template>
 				</van-field>
 			</div>
-			<div class="opacity-60 fs_12">开通会员前我已阅读并遵守<span>《平台用户服务协议》</span></div>
+			<div class="opacity-60 fs_12">开通会员前我已阅读并遵守<span @click="protocolDialog = !protocolDialog" class="text_yellow-400">《{{protocolTitle}}》</span></div>
 		</div>
 
 		<section class="p_fixed recruit open_btn">
 			<van-button size="large" class="fs_16" @click="onOpenSubmit(checkbox)">激活开通会员</van-button>
 		</section>
+
+		<!-- 平台综合服务协议 -->
+		<van-dialog v-model="protocolDialog" :title="protocolTitle" class="protocol">
+	  	<Document :protocolid="protocolid"></Document>
+		</van-dialog>
 
 		<!-- 填写邀请码 -->
 		<van-dialog v-model="showDialog" class="p-3 dialog_onInvite"
@@ -113,12 +118,18 @@
 </template>
 
 <script>
+	import Document from '@/views/Documents';
 	export default {
 		name: 'OpenMember',
 		data () {
 			return {
-				directorUrl:"https://img.yzcdn.cn/vant/apple-2.jpg",
-				directorWechat:"负责人微信",
+				profile:{},
+				// 负责人
+				director:{
+					avatar: "https://img.yzcdn.cn/vant/apple-2.jpg",
+					name: "抖推猫",
+					wx_name: "doutuimao"
+				},
 				swipeNotice:[
 					{
 						id:"1",
@@ -178,13 +189,38 @@
 					},
 				],
 				checkbox:false,
+				protocolTitle:"平台综合服务协议",
+				protocolid:"25",
+				protocolDialog:false,
 
 				showDialog: true,
 				inpuInvitationCode:"",
 			}
 		},
-		components: {},
+		components: {
+			Document
+		},
+		mounted(){
+			
+		},
+		inject:['reload'],
 		methods:{
+			// 获取负责人信息
+			directorLoad(){
+				this.MyAxios.post("",{
+
+				}).then(data => {
+					console.log(data);
+					if (data.code == 0) {
+						// ...
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
+			},
 			// 复制到粘贴板成功
 			onCopy: function (e) {
 	      this.$toast.success("复制成功\n" + e.text);
@@ -197,9 +233,29 @@
 	    onOpenSubmit(value) {
 	    	// 还要判断一下邀请码有没有填写
 	    	// ...
-	    	
+	    	var _this = this;
 	    	if(value){
-	    		this.$router.push("activationOpenMember");
+		    	this.MyAxios.post("/api/wechat/user/active_code",{
+		    		active_code:this.inpuInvitationCode
+					}).then(data => {
+						console.log(data);
+						if (data.code == 0) {
+							this.$router.push("activationOpenMember");
+						} else {
+							this.$toast.fail({
+								message:data.msg,
+								duration:5000,
+								onClose:function(){
+									_this.reload(); // 重新刷新页面
+								},
+							});
+							this.$notify({
+	              message: data.msg,
+	              type: 'warning'
+	            });
+						}
+					})
+	    		
 	    	}else{
 	    		this.$dialog.confirm({
 					  title: '温馨提示',
@@ -211,6 +267,8 @@
 			// 提交邀请码
 	    onInviteSubmit(){
 	    	this.showDialog = false;
+	    	// 这里需要一个接口拿到负责人的信息
+	    	//this.directorLoad();
 	    },
 		},
 	}

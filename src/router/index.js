@@ -87,6 +87,22 @@ export default new Router({
           component: () => import('@/views/NewsList'),
         },
         {
+          path: '/newsDetail',
+          name: 'NewsDetail',
+          meta:{
+            title:'资讯详情',
+          },
+          component: () => import('@/views/NewsDetail'),
+        },
+        {
+          path: '/noticeDetail',
+          name: 'NoticeDetail',
+          meta:{
+            title:'公告详情',
+          },
+          component: () => import('@/views/NoticeDetail'),
+        },
+        {
           path: '/productDetail',
           name: 'productDetail',
           meta:{
@@ -189,6 +205,14 @@ export default new Router({
             title:'招商海报',
           },
           component: () => import('@/views/Poster'),
+        },
+        {
+          path: '/documents',
+          name: 'Documents',
+          meta:{
+            title:'抖推猫',
+          },
+          component: () => import('@/views/Documents'),
         },
       ],
     },

@@ -26,10 +26,13 @@
 		name: 'CashoutFinished',
 		data () {
 			return {
-				cash:"100.00",
+				cash:"",
 			}
 		},
 		components: {},
+		mounted(){
+			this.cash = this.$route.query.cash
+		},
 		methods:{
 			complete(){
 				this.$router.go(-1);

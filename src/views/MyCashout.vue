@@ -1,5 +1,5 @@
 <template>
-	<div class="page-container">
+	<div class="page-container cashOut-container">
 		<!-- 账户余额 -->
 		<section class="bg_dark-400 p-3 text-center">
 			<h5 class="m-0 fs_16 font-weight-normal">账户余额(元)</h5>
@@ -8,9 +8,25 @@
 
 		<van-form @submit="onSubmit">
 			<section class="mt-3 bg_dark-400 p-3">
+
 				<h5 class="m-0 d-flex align-items-center">
-					<img :src="require('@/assets/images/wechat.png')" alt="" width="22px" />
-					<span class="ml-2 fs_16">微信提现</span>
+					<img :src="logoType==1?bankLogo:logoType==2?alipayLogo:wechatLogo" alt="" width="22px" />
+					<van-field
+						class="d-flex flex-nowrap justify-content-start align-items-center"
+					  readonly
+					  clickable
+					  colon
+					  label="提现账户"
+					  label-width="65"
+					  right-icon="play"
+					  name="picker"
+					  :value="cashOutText"
+					  placeholder="点击选择提现账户"
+				    :border="false"
+				    :error="false"
+				    :rules="[{ required: true, trigger:'onChange',message: '请选择提现账户' }]"
+					  @click="showPicker = true"
+					/>
 				</h5>
 				<hr class="item_hr" />
 
@@ -36,6 +52,18 @@
 	    </section>
 
     </van-form>
+
+    <!-- 银行卡/支付宝选择 -->
+		<van-popup v-model="showPicker" position="bottom">
+		  <van-picker
+		    show-toolbar
+		    value-key="type_text"
+		    :columns="cashOutAccount"
+		    @confirm="onConfirm"
+		    @cancel="showPicker = false"
+		  />
+		</van-popup>
+
 	</div>
 </template>
 
@@ -44,20 +72,97 @@
 		name: '',
 		data () {
 			return {
-				balance:"1000.00",
+				balance:"",
 				number:"",
-				balance2:"1000.00",
+				balance2:"",
+				showPicker: false,
+				logoType:"",// 1是银行卡；2是支付宝；其余是微信
+				cashOutText:'微信', // 默认微信提现
+				cashOutId:"wechat", // 默认微信提现
+				wechatLogo:require('@/assets/images/wechat.png'),
+				alipayLogo:require("@/assets/images/Alipay.png"),
+				bankLogo:require("@/assets/images/bank.png"),
+				cashOutAccount:[
+					{
+						type:3,
+						id:"wechat",
+						truename:"sam",
+						bank_code:"",
+						alipay: "",
+						type_text: "微信",
+					},
+				],
 			}
 		},
 		components: {},
+		mounted(){
+			this.onLoadBalance();
+			this.onLoadBank();
+		},
 		methods:{
+			onLoadBalance(){
+				this.MyAxios.post("/api/wechat/deposit/my_deposit",{
+				}).then(data => {
+					//console.log(data);
+					if (data.code == 0) {
+						this.balance = data.data;
+						this.balance2 = data.data;
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
+			},
+			onLoadBank(){
+				this.MyAxios.post("/api/wechat/deposit/index",{
+				}).then(data => {
+					console.log(data);
+					if (data.code == 0) {
+						this.cashOutAccount.push(...data.data);
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
+			},
+			onConfirm(value) {
+				console.log(value);
+	      this.cashOutText = value.type_text;
+	      this.logoType = value.type;
+	      this.cashOutId = value.id;
+	      this.showPicker = false;
+	    },
 			outAll(){
 				this.number = this.balance2;
 			},
 			onSubmit(values) {
-	      console.log('submit', values);
-	      this.$router.push("cashoutFinished");
-	    }
+	      // console.log('submit', values);
+	      var _this = this;
+				this.MyAxios.post("/api/wechat/deposit/apply_deposit",{
+					deposit_type:this.cashOutId,
+					deposit_money:this.number,
+				}).then(data => {
+					console.log(data);
+					if (data.code == 0) {
+            this.$toast.loading({
+							message:"提交中...",
+							duration:3000,
+							onClose:function(){
+								_this.$router.push("cashoutFinished?cash="+this.number);
+							}
+						});
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
+	    },
 		}
 	}
 </script>

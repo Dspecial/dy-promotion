@@ -4,9 +4,9 @@
 		<section class="top_news">
 			<div class="bg_dark-400 p-3">
 				<h4 class="text_yellow fs_18 m-0">今日资讯</h4>
-				<h5 class="fs_22 m-0 mt-3">{{topNewsTitle}}</h5>
+				<h5 class="fs_22 m-0 mt-3">{{todayNews.title}}</h5>
 				<div class="text-right">
-					<van-button class="mt-4" color="#FE2C58">查看资讯</van-button>
+					<van-button class="mt-4" color="#FE2C58" @click="goNewsDetail(todayNews)">查看资讯</van-button>
 				</div>
 			</div>
 		</section>
@@ -24,9 +24,9 @@
 					  <van-col>
 					  	<van-image width="100" height="100" :src="news.newsimage" />
 					  </van-col>
-					  <van-col class="d-flex flex-wrap align-content-between">
+					  <van-col span="24" class="d-flex flex-wrap align-content-between">
 					  	<div class="fs_16 font-weight-normal flex-fill-100">{{news.title}}</div>
-					  	<span class="fs_12 font-weight-normal bg_dark-400 pt-2 pb-2 pl-3 pr-3 opacity-60 flex-fill-100">{{news.createtime}}</span>
+					  	<span class="fs_12 font-weight-normal bg_dark-400 pt-2 pb-2 pl-3 pr-3 opacity-60">{{news.createtime}}</span>
 					  </van-col>
 					</van-row>
 				</template>
@@ -40,7 +40,10 @@
 		name: '',
 		data () {
 			return {
-				topNewsTitle:"",
+				todayNews:{
+					id:"",
+					title:"",
+				},
 				newsList:[],
 				page: 0, 
         //limit: 5,
@@ -51,21 +54,37 @@
 		},
 		components: {},
 		mounted(){
-			this.onLoad();
+			this.loadTopNews();
 		},
 		methods:{
-			onLoad() {
-	    	this.page++; // 分页数加一
-	     	this.loadData(); // 调用方法,请求数据
-	    },
-			loadData(){
+			// 获取今日资讯
+	    loadTopNews(){
 				this.MyAxios.post("/api/wechat/information/index",{
 					//page:1,
 				}).then(data => {
 					if (data.code == 0) {
 						// 今日资讯
-						this.topNewsTitle = data.data.top_info.title;
+						this.todayNews = data.data.top_info;
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
+	    },
 
+	    onLoad() {
+	    	this.page++; // 分页数加一
+	     	this.loadData(); // 调用方法,请求数据
+	    },
+	    // 获取新闻列表
+			loadData(){
+				this.MyAxios.post("/api/wechat/information/index",{
+					page:this.page,
+				}).then(data => {
+					//console.log(data);
+					if (data.code == 0) {
 						/**
 						 * 资讯列表
 						 */
@@ -98,8 +117,9 @@
 					}
 				})
 			},
+			// 去到资讯详细页面
 			goNewsDetail(news){
-				console.log(news);
+				this.$router.push("/newsDetail?id=" + news.id);
 			},
 		},
 	}

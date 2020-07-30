@@ -3,7 +3,7 @@
 * @Email: dxxtalking@163.com
 * @Date:   2020-07-14 13:29:54
 * @Last Modified by:   dxx
-* @Last Modified time: 2020-07-21 18:05:54
+* @Last Modified time: 2020-07-30 17:33:25
 */
 @charset "UTF-8";
 /*css 初始化 */
@@ -999,6 +999,11 @@ h1,h2,h3,h4,h5,h6{
   height: 40px;
   line-height: 40px;
 }
+.van-notice-bar{
+  .van-notice-bar__content{
+    width: 100%;
+  }
+}
 
 .link_item{
   border-radius:4px;
@@ -1448,6 +1453,30 @@ h1,h2,h3,h4,h5,h6{
   }
 }
 
+.cashOut-container{
+
+  h5.d-flex{
+    .van-cell{
+      background-color: transparent;
+    }
+    .van-field__label{
+      color: #fff;
+    }
+    .van-field__control::placeholder{
+      color:#474D6B;
+    }
+    .van-field__control{
+      color:#fff;
+    }
+    .van-field__right-icon{
+      position:absolute;
+      right: 0;
+      -webkit-transform:rotate(90deg); /* Safari 和 Chrome */
+      -o-transform:rotate(90deg);  /* Opera */
+      transform:rotate(90deg);
+    }
+  }
+}
 /*我的提现*/
 .outMoney{
   .van-cell{
@@ -1581,6 +1610,10 @@ h1,h2,h3,h4,h5,h6{
 }
 
 /*银行卡*/
+.bank_logo{
+  background-color:#fff;
+  padding: 2px;
+}
 .van-field--error .van-field__control, .van-field--error .van-field__control::placeholder{
   color: #FF4D4F!important;
 }
@@ -1612,7 +1645,6 @@ h1,h2,h3,h4,h5,h6{
   }
   .van-field__control{
     color:#fff;
-    font-size:1.33rem;
     padding-bottom: 1.25rem;
     border-bottom: 1px solid #3B4260;
   }
@@ -1631,4 +1663,21 @@ h1,h2,h3,h4,h5,h6{
       padding:0!important;
     }
   }
+}
+/*协议*/
+.protocol{
+  .van-dialog__content{
+    max-height: 50%;
+  }
+}
+
+/*缺省页面*/
+.default_img{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.default_img .van-image img{
+  width: 310px;
 }
