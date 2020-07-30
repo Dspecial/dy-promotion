@@ -3,7 +3,7 @@
 * @Email: dxxtalking@163.com
 * @Date:   2020-07-21 09:54:12
 * @Last Modified by:   dxx
-* @Last Modified time: 2020-07-30 15:50:06
+* @Last Modified time: 2020-07-30 18:02:14
 */
 import axios from 'axios'; // 引入axios
 import qs from 'qs'; //qs是一个url参数转化（parse和stringify）的js库
@@ -28,7 +28,7 @@ axios.interceptors.request.use((config) => {
   //在发送请求之前做某件事
   if (config.method === 'post') {
     //config.data.token = VueCookies.get("token");
-    config.data.token = "123456"; // 写死用户token
+    config.data.token = "5f1ede989c9c8"; // 写死用户token
     config.headers.token = 'dd3e2f22a9e9f2dcf14c32628268963b'; //写死token
 
     config.data = qs.stringify(config.data);

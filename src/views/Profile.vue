@@ -126,7 +126,7 @@
 				<div class="mt-3" v-else>
 					<van-row :gutter="15">
 						<van-col span="12">
-							<van-button class="border-radius-4 fs_16 invite_bth" size="large">邀请好友</van-button>
+							<van-button class="border-radius-4 fs_16 invite_bth" size="large" @click="inviteFriend">邀请好友</van-button>
 						</van-col>
 						<van-col span="12">
 							<van-button class="border-radius-4 fs_16" size="large" @click="toBeMember">开通会员</van-button>
@@ -186,7 +186,7 @@
 					// name: "片刻安静",  //微信昵称
 					// avatar: "https://img.yzcdn.cn/vant/cat.jpeg", //头像
 					// wx_name: "piankeanjingsss",  //微信名
-					// mobile: "13985623210",  //手机号
+					// mobile: "1212121212",  //手机号
 					// is_vip: "1",  //是否为会员，1为非会员，2为会员
 					// is_vip_text: "Is_vip 1",//邀请码
 				},
@@ -223,6 +223,10 @@
 						this.profile = data.data.customer_info;
 						this.withdraw = data.data.money_data;
 						this.director = data.data.agent_info;
+
+						if(this.isEmpty(this.profile.mobile)){
+							this.profile.mobile = "请绑定手机号"
+						};
 					} else {
 						this.$notify({
               message: data.msg,
@@ -230,6 +234,17 @@
             });
 					}
 				})
+			},
+			inviteFriend(){
+				if(this.isEmpty(this.profile.mobile)){
+					this.$dialog.alert({
+					  title: '温馨提示',
+					  message: '请绑定手机号',
+					}).then(() => {
+					  // on close
+					});
+				};
+				console.log("邀请好友");
 			},
 			// 复制到粘贴板成功
 			onCopy: function (e) {
@@ -244,6 +259,14 @@
 	    	this.$router.push("openMember");
 	    },
 
+			// 判断是否为空字符串
+			isEmpty(obj){
+	    	if(typeof obj == "undefined" || obj == null || obj == ""){
+			  	return true;
+		    }else{
+		    	return false;
+		    }
+			},
 		},
 	}
 </script>
