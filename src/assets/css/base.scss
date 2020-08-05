@@ -3,7 +3,7 @@
 * @Email: dxxtalking@163.com
 * @Date:   2020-07-14 13:29:54
 * @Last Modified by:   dxx
-* @Last Modified time: 2020-07-30 17:33:25
+* @Last Modified time: 2020-08-05 19:55:02
 */
 @charset "UTF-8";
 /*css 初始化 */
@@ -1680,4 +1680,9 @@ h1,h2,h3,h4,h5,h6{
 }
 .default_img .van-image img{
   width: 310px;
+}
+
+.codeDialog img{
+  width: 80%;
+  height: auto;
 }

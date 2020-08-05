@@ -63,6 +63,14 @@ export default new Router({
       component: () => import('@/views/HomeNei'),
       children:[
         {
+          path: '/bannerDetail',
+          name: 'BannerDetail',
+          meta:{
+            title:'轮播详情',
+          },
+          component: () => import('@/views/BannerDetail'),
+        },
+        {
           path: '/introduction',
           name: 'IntroductionVideo',
           meta:{

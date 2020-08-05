@@ -102,9 +102,9 @@
 											<van-tag mark color="#FE2C58" class="new_pro" v-if="item.is_tagdata == 2">新品</van-tag>
 										</van-image>
 										<div class="ml-3 item_heading_title">
-											<router-link :to="'data'">
+											<div @click="goProductDetail(item)">
 												<h4 class="m-0 fs_16 text-truncate">{{item.d_name}}<van-tag class="ml-2 fs_12 font-weight-thin">{{tab.name}}</van-tag></h4>
-											</router-link>
+											</div>
 											<div class="mt-2">
 												<van-image class="mr-1" width="16" height="16" :src="require('@/assets/images/douyin.png')" />
 												<van-image width="16" height="16" :src="require('@/assets/images/toutiao.png')" />
@@ -128,11 +128,19 @@
 								  	<h5 class="m-0 fs_14 font-weight-normal">总分佣比例</h5>
 								  	<p class="m-0 mt-3 fs_18">{{item.ad_extends}}</p>
 								  </van-col>
-								  <van-col span="8" class="text-center" @click="downloadCode(item)" >
+								  <van-col span="8" class="text-center" @click="downloadCode(1,item.id)" >
 								  	<van-icon class-prefix="icon" name="download4" color="#FE2C58" />
 								  	<span class="ml-1 font-weight-normal text_pink fs_14">下载推广码</span>
 								  </van-col>
 								</van-row>
+
+								<!-- 下载推广码 -->
+								<van-dialog v-model="pCodeShow" title="下载推广码" :show-cancel-button="false" :showConfirmButton="false" :closeOnClickOverlay="true" class="codeDialog">
+									<div class="text-center pt-3 pb-3">
+									  <img :src="codeImg" />
+									  <p class="m-0 opacity-60 mt-2">长按图片保存到相册</p>
+								  </div>
+								</van-dialog>
 
 								<hr class="item_hr" />
 
@@ -147,7 +155,7 @@
 													<h5 class="m-0 fs_14 mb-1 text-truncate">{{child.matter_name}}</h5>
 													<p class="m-0 fs_12 opacity-60 font-weight-normal text-truncate">{{child.share_title}}</p>
 												</div>
-												<van-button color="#FE2C58" @click="downloadCode(item)">推广</van-button>
+												<van-button color="#FE2C58" @click="downloadCode(2,child.id)">推广</van-button>
 											</li>
 										</template>
 									</ul>
@@ -166,6 +174,7 @@
 			<van-image width="55" height="57" :src="require('@/assets/images/hang_class.png')" />
 			<van-image width="59" height="57" :src="require('@/assets/images/hang_vip.png')" />
 		</section>
+
 	</div>
 </template>
 
@@ -176,9 +185,6 @@
 		data () {
 			return {
 				swipeImages:[
-					require("@/assets/images/banner.png"),
-        	require("@/assets/images/banner.png"),
-        	require("@/assets/images/banner.png"),
 				],
 				swipeNotice:[],
 				pagePro: 0, 
@@ -191,6 +197,8 @@
 				membership:"我是会员群的id",
 				tabCard:[],
 				tabProList:[],
+				pCodeShow:false,
+				codeImg:"https://img.yzcdn.cn/vant/apple-3.jpg"
 			}
 		},
 		components: {},
@@ -223,6 +231,7 @@
 				if(item.type==2){ //作为链接跳转
 					window.location = item.url;
 				}else{
+					this.$router.push("/bannerDetail?id="+item.id);
 					console.log("跳转到banner详情");
 				}
 			},
@@ -242,7 +251,7 @@
 			},
 			// 公告详细页面
 			toNoticeDetail(notice){
-				this.$router.push("/NoticeDetail?id="+notice.id);
+				this.$router.push("/noticeDetail?id="+notice.id);
 			},
 			
 			// 产品列表分类
@@ -251,7 +260,6 @@
 					page:this.pagePro,
 					cate_id:this.proActive,
 				}).then(data => {
-					//console.log(data);
 					if (data.code == 0) {
 						// 分类
 						this.tabCard = data.data.cate_list;
@@ -320,8 +328,24 @@
           }
         });
 			},
-			downloadCode(pro){
-				console.log("下载推广码");
+			// 下载推广码
+			downloadCode(type,id){
+				this.MyAxios.post("/api/wechat/products/get_extend_code",{
+					// token:"",
+					type:type, // 值为1传小程序id,值为2传小程序产品id
+					id:id,
+				}).then(data => {
+					if (data.code == 0) {
+						this.pCodeShow = true;
+						// 推广图片
+						this.codeImg = data.data;
+					}else{
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
 			},
 
 			// 复制到粘贴板成功

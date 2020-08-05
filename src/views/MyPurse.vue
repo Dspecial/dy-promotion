@@ -42,31 +42,31 @@
 		name: 'MyPurse',
 		data () {
 			return {
-				purseBalance:"0.00",
+				purseBalance:"",
 				purseInfo:[
 					{
 						itemTitle:"总收益(元)",
-						balance:"0.00"
+						balance:""
 					},
 					{
 						itemTitle:"上月已结算(元)",
-						balance:"0.00"
+						balance:""
 					},
 					{
 						itemTitle:"上月总收益(元)",
-						balance:"0.00"
+						balance:""
 					},
 					{
 						itemTitle:"昨日已结算(元)",
-						balance:"0.00"
+						balance:""
 					},
 					{
 						itemTitle:"本月待结算(元)",
-						balance:"0.00"
+						balance:""
 					},
 					{
 						itemTitle:"本月总收益(元)",
-						balance:"0.00"
+						balance:""
 					},
 				],
 				purseRecords:[
@@ -85,7 +85,32 @@
 				],
 			}
 		},
-		components: {}
+		components: {},
+		mounted(){
+			this.onLoad();
+		},
+		methods:{
+			onLoad(){
+				this.MyAxios.post("/api/wechat/user/my_wallet",{
+				}).then(data => {
+					console.log(data);
+					if (data.code == 0) {
+						this.purseBalance = data.data.all_can_deposit;
+						this.purseInfo[0].balance = data.data.all_money;
+						this.purseInfo[1].balance = data.data.last_end_money;
+						this.purseInfo[2].balance = data.data.last_all_money;
+						this.purseInfo[3].balance = data.data.yesterday_money;
+						this.purseInfo[4].balance = data.data.current_month_loading_money;
+						this.purseInfo[5].balance = data.data.current_month_all_money;
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
+			},
+		},
 	}
 </script>
 

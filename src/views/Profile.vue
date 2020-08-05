@@ -21,7 +21,21 @@
 			  <van-col :span="12">
 			  	<div class="d-flex justify-content-between align-items-center">
 			  		<div class="fs_12 font-weight-normal text-999 w-70 text-truncate">微信：<span>{{profile.wx_name}}</span></div>
-			  		<van-button plain hairline size="mini">编辑</van-button>
+			  		<van-button plain hairline size="mini" @click="weChatInputShow = true">编辑</van-button>
+	  				<!-- 绑定微信号 -->
+						<van-dialog v-model="weChatInputShow" title="请绑定微信号" :show-cancel-button="false" :showConfirmButton="false" :closeOnClickOverlay="true" class="codeDialog">
+							<div class="text-center p-3">
+							  <van-form @submit="bindWeChat" class="mt-3 wxName" :show-error-message="false">
+									<!-- 允许输入数字，调起带符号的纯数字键盘 -->
+									<van-field v-model="wxName" name="微信号" placeholder="请填写微信号"
+										:rules="[{ required: true, message: '请填写微信号' }]" border>
+									</van-field>
+									<van-button size="large" color="#FE2C58" class="border-radius-4 fs_16 w-75 mt-3" native-type="submit">
+									确认</van-button>
+								</van-form>
+							  <p class="m-0 opacity-60 mt-2 text_pink">请绑定微信号方便下级用户联系</p>
+						  </div>
+						</van-dialog>
 			  	</div>
 			  </van-col>
 			  <van-col :span="12">
@@ -183,19 +197,9 @@
 			return {
 				// 个人信息
 				profile:{
-					// name: "片刻安静",  //微信昵称
-					// avatar: "https://img.yzcdn.cn/vant/cat.jpeg", //头像
-					// wx_name: "piankeanjingsss",  //微信名
-					// mobile: "1212121212",  //手机号
-					// is_vip: "1",  //是否为会员，1为非会员，2为会员
-					// is_vip_text: "Is_vip 1",//邀请码
 				},
 				// 收益
 				withdraw:{
-					// all_can_deposit:"0.00",
-					// all_money:"15.00",
-					// today_money:"0.00",
-					// yesterday_money:"12.00"
 				},
 
 				// 负责人
@@ -205,7 +209,9 @@
 					// wx_name: "暂无"
 				},
 
-				teamWechat:"微信群的ID"
+				teamWechat:"微信群的ID",
+				weChatInputShow:false,
+				wxName:"",
 			}
 		},
 		components: {},
@@ -227,6 +233,27 @@
 						if(this.isEmpty(this.profile.mobile)){
 							this.profile.mobile = "请绑定手机号"
 						};
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
+			},
+			// 绑定微信号
+			bindWeChat(){
+				console.log(this.wxName);
+				this.MyAxios.post("/api/wechat/user/edit_wx",{
+					//token:"",
+					wx_name:this.wxName,
+				}).then(data => {
+					if (data.code == 0) {
+						this.weChatInputShow = false;
+						this.$toast.success('设置微信号成功');
+						setTimeout(()=>{
+					  	this.onLoad();
+					 	},1000)
 					} else {
 						this.$notify({
               message: data.msg,
@@ -272,5 +299,7 @@
 </script>
 
 <style>
-
+	.wxName .van-button{
+		height: 35px!important;
+	}
 </style>

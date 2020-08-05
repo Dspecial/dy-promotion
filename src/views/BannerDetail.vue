@@ -28,7 +28,7 @@
 		  </div>
 		</van-overlay>
 			
-		<section class="mt-4 news_content">
+		<section class="mt-4 banner_content">
 			<div v-html="content"></div>
 		</section>
 	</div>
@@ -37,7 +37,7 @@
 <script>
 	import Player from 'xgplayer';// 西瓜播放器，h5视频播放
 	export default {
-		name: 'NoticeDetail',
+		name: 'BannerDetail',
 		data () {
 			return {
 				id:"",
@@ -56,16 +56,16 @@
 		components: {},
 		mounted(){
 			this.id = this.$route.query.id;
-			this.loadNoticeDetail();
+			this.loadBanDetail();
 		},
 		methods:{
 			// 获取资讯详情
-	    loadNoticeDetail(){
-				this.MyAxios.post("/api/wechat/notice/details",{
+	    loadBanDetail(){
+				this.MyAxios.post("/api/wechat/banner/details",{
 					id:this.id,
 				}).then(data => {
 					if (data.code == 0) {
-						// 公告
+						// banner详情
 						this.title = data.data.title;
 						this.createtime = data.data.createtime;
 						this.videoUrl = data.data.videourl;
@@ -113,7 +113,7 @@
 		width: 100%;
 		height: 100%;
 	}
-	.news_content{
+	.banner_content{
 		div,p,span{
 			background: transparent!important;
 			color:#fff!important;
