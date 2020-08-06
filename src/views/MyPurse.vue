@@ -93,7 +93,7 @@
 			onLoad(){
 				this.MyAxios.post("/api/wechat/user/my_wallet",{
 				}).then(data => {
-					console.log(data);
+					//console.log(data);
 					if (data.code == 0) {
 						this.purseBalance = data.data.all_can_deposit;
 						this.purseInfo[0].balance = data.data.all_money;

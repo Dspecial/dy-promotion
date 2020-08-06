@@ -19,15 +19,11 @@ import VueClipboard from 'vue-clipboard2'; // 复制到粘贴板
 
 import VueCookies from 'vue-cookies'; // api: https://github.com/cmp-cc/vue-cookies
 import MyAxios from '@/core/Axios.js';
-// import $ from 'jquery'; // 引入jquery
-// import Ajax from '@/core/Ajax.js';
 import globalVarable from '@/core/global_variable.js';
 
 Vue.prototype.GLOBAL = globalVarable;
 Vue.prototype.VueCookies = VueCookies;
 Vue.prototype.MyAxios = MyAxios;
-
-// Vue.prototype.Ajax = Ajax;
 
 Vue.config.productionTip = false;
 Vue.use(Vant);

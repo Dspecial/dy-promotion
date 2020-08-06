@@ -3,7 +3,7 @@
 * @Email: dxxtalking@163.com
 * @Date:   2020-07-14 13:29:54
 * @Last Modified by:   dxx
-* @Last Modified time: 2020-08-05 19:55:02
+* @Last Modified time: 2020-08-06 18:19:11
 */
 @charset "UTF-8";
 /*css 初始化 */
@@ -1395,15 +1395,18 @@ h1,h2,h3,h4,h5,h6{
     color: #fff;
     padding: 1.25rem 0;
   }
-  .van-collapse-item__content{
-    background-color:transparent; 
+  .van-collapse-item__content{ 
     color: #fff;
+    background: transparent;
   }
   .van-cell__right-icon{
     color: #fff;
   }
   .van-collapse-item__content img{
     width: 100%;
+    max-height: 150px;
+    border-radius: 8px;
+    background: #333333;
   }
 }
 

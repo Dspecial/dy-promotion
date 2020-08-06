@@ -23,6 +23,7 @@
 
 		<!-- 收益记录 -->
 		<section class="mt-3">
+			<div v-if="mounthlyRecords.length == 0" class="opacity-60 text-center">暂无收益</div>
 			<template v-for="(cell,index) in mounthlyRecords">
 				<van-row type="flex" align="center" justify="space-between" class="mb-3 bg_dark-400 p-3">	
 					<van-col>
@@ -45,41 +46,60 @@
 		name: 'RevenueRecord',
 		data () {
 			return {
-				minDate: new Date(2020, 0, 1),
+				minDate: new Date('2020/01'),
 	      maxDate: new Date(),
-	      currentDate: "2020-07",
+	      currentDate: "2020-08",
 				release:"600.00",
 				mounthlyRecords:[
-					{
-						date:"2020-07-01",
-						money:"100.00"
-					},
-					{
-						date:"2020-07-02",
-						money:"100.00"
-					},
-					{
-						date:"2020-07-03",
-						money:"100.00"
-					},
-					{
-						date:"2020-07-04",
-						money:"100.00"
-					},
-					{
-						date:"2020-07-05",
-						money:"100.00"
-					},
 				],
 			}
 		},
 		components: {
 			VantFieldDate,
 		},
+		mounted(){
+			this.onload();
+			this.getRevenue();
+		},
 		methods:{
+			// 获取月份
+			onload(){
+				this.MyAxios.post("/api/wechat/income/record",{
+
+				}).then(data => {
+					if (data.code == 0) {
+						var lastDate = data.data.month_list[data.data.month_list.length - 1];
+						var changeDate = lastDate.replace("-","/"); 
+						this.minDate = new Date(changeDate);
+						this.currentDate = data.data.month_list[0];
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
+			},
+			// 获取收益记录
+			getRevenue(date){
+				this.MyAxios.post("/api/wechat/income/record",{
+					date:date,
+				}).then(data => {
+					if (data.code == 0) {
+						this.release = data.data.sum_money;
+						this.mounthlyRecords = data.data.list;
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
+			},
 			// 日期下拉框值发生改变以后，@change 是接收的子组件的方法
 			onChange(val1,val2,val3){ // val1是毫秒数，val2是原始值，val3是格式过的"yyyy-MM-dd"
-				console.log(val3);
+				this.getRevenue(val3);
+				this.currentDate = val3;
 			},
 		}
 	}

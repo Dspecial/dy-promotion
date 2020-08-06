@@ -155,12 +155,12 @@
 		<section class="mt-4">
 			<h3 class="fs_18 m-0">其他功能</h3>
 			<van-row class="mt-3">
-				<van-col span="6" class="text-center mb-3">
+<!-- 				<van-col span="6" class="text-center mb-3">
 					<router-link :to="'douyin'">
 						<van-image width="35" height="35" :src="require('@/assets/images/other_fun1.png')" />
 						<p class="m-0 mt-2 font-weight-normal">我的抖音号</p>
 					</router-link>
-				</van-col>
+				</van-col> -->
 				<van-col span="6" class="text-center mb-3">
 					<router-link :to="'income'">
 						<van-image width="35" height="35" :src="require('@/assets/images/other_fun2.png')" />

@@ -2,14 +2,14 @@
 	<div class="page-container">
 		<!-- video swipe -->
 		<van-swipe :loop="false" :show-indicators="false" :width="300" class="ban_video">
-		  <van-swipe-item v-for="(video, index) in swipeVideo" :key="index" @click="playVideo(video)">
+		  <van-swipe-item v-for="(swipe, index) in swipeVideo" :key="index" @click="playVideo(swipe.videofile)">
 		  	<div class="p_relative">
-			    <img v-lazy="video.coverImg"/>
+			    <img v-lazy="swipe.postimage"/>
 			    <div class="p_absolute ban_paly">
 			    	<van-icon name="play" />
 			    </div>
 		  	</div>
-		    <p class="m-0 fs_18 p-3">{{index+1}}.<span class="ml-1">{{video.title}}</span></p>
+		    <p class="m-0 fs_18 p-3">{{index+1}}.<span class="ml-1">{{swipe.title}}</span></p>
 		  </van-swipe-item>
 		</van-swipe>
 
@@ -28,12 +28,12 @@
 						<template #title>
 							<div class="d-flex align-items-center">
 					      <span class="sort_square border-radius-4">{{index+1}}</span>
-					      <h5 class="fs_18 m-0 ml-2 w-90">{{question.title}}</h5>
+					      <h5 class="fs_18 m-0 ml-2 w-90">{{question.question}}</h5>
 							</div>
 				    </template>
 				    <!-- 内容 -->
-					  <div class="p_relative" @click="playVideo(question)">
-					    <img v-lazy="question.coverImg"/>
+					  <div class="p_relative" @click="playVideo(question.answer)">
+					    <img v-lazy="question.postimage"/>
 					    <div class="p_absolute ban_paly">
 					    	<van-icon name="play" />
 					    </div>
@@ -51,47 +51,13 @@
 		name: 'IntroductionVideo',
 		data () {
 			return {
-				swipeVideo:[	
-					{
-						coverImg: require("@/assets/images/ban_video1.png"),
-						title:"如何绑定抖音挂载小程序？",
-						videoUrl:require('@/assets/video/video1.mp4'),
-					},
-					{
-						coverImg:require("@/assets/images/banner.png"),
-						title:"如何绑定抖音挂载小程序？",
-						videoUrl:require('@/assets/video/video2.mp4'),
-					},
-					{
-						coverImg:require("@/assets/images/ban_video1.png"),
-						title:"如何绑定抖音挂载小程序？",
-						videoUrl:require('@/assets/video/video1.mp4'),
-					},
-					{
-						coverImg:require("@/assets/images/banner.png"),
-						title:"如何绑定抖音挂载小程序？",
-						videoUrl:require('@/assets/video/video2.mp4'),
-					},
+				swipeVideo:[
 				],
 				videoShow:false,
 	      Player: null,
 	      activeName:1,
 	      questionList:[
-	      	{
-	      		coverImg: require("@/assets/images/ban_video1.png"),
-						title:"平台介绍有吗？",
-						videoUrl:require('@/assets/video/video1.mp4'),
-	      	},
-	      	{
-	      		coverImg: require("@/assets/images/banner.png"),
-						title:"新人加入第一步怎么去学习？新人加入第一步怎么去学习？",
-						videoUrl:require('@/assets/video/video2.mp4'),
-	      	},
-	      	{
-	      		coverImg: require("@/assets/images/ban_video1.png"),
-						title:"88老会员和298新会员有什么区别？",
-						videoUrl:require('@/assets/video/video1.mp4'),
-	      	},
+
 	      ],
 			}
 		},
@@ -99,15 +65,45 @@
 
 		},
 		mounted(){
-			
+			this.getSwipeVideo();
+			this.getQuestion();
 		},
 		methods:{
-			playVideo(item){
+			// 获取swipe视频
+			getSwipeVideo(){
+				this.MyAxios.post("/api/wechat/playmethods/banner",{
+				}).then(data => {
+					if (data.code == 0) {
+						this.swipeVideo = data.data;
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
+			},
+			// 获取常见问题
+			getQuestion(){
+				this.MyAxios.post("/api/wechat/playmethods/lists",{
+				}).then(data => {
+					console.log(data);
+					if (data.code == 0) {
+						this.questionList = data.data;
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
+			},
+			playVideo(video){
 				this.videoShow = true;
 				this.Player = new Player({
 	      	// el、url为必选配置，其它为可选配置
 	        el: document.querySelector('#vs'),
-	        url: item.videoUrl,
+	        url: video,
 	        //poster: item.coverImg,
 	        volume: 0.6,    // 初始音量
 	        autoplay: true,  // 自动播放

@@ -61,12 +61,12 @@
 			  		<span class="fs_14 d-block mt-2 font-weight-normal">会员群</span>
 			  	</div>
 			  </van-col>
-			  <van-col span="8">
+<!-- 			  <van-col span="8">
 			  	<router-link class="fun_item text-center" :to="'douyin'">
 			  		<van-image width="45" height="45" :src="require('@/assets/images/fun_item2.png')" />
 			  		<span class="fs_14 d-block mt-2 font-weight-normal">抖音号</span>
 			  	</router-link>
-			  </van-col>
+			  </van-col> -->
 			  <van-col span="8">
 			  	<router-link class="fun_item text-center" :to="'news'">
 			  		<van-image width="45" height="45" :src="require('@/assets/images/fun_item3.png')" />
