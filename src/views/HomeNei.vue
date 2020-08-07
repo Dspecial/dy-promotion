@@ -1,7 +1,7 @@
 <template>
 	<div class="bg_global">
 		<!-- header -->
-    <header-back :navTitle="this.$route.meta.title" :isLeft="true"></header-back>
+    <!-- <header-back :navTitle="this.$route.meta.title" :isLeft="true"></header-back> -->
     <!-- body -->
     <div class="page_nei p-3">
     	<router-view v-if="isRouterAlive"></router-view>

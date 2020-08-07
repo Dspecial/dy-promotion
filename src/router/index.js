@@ -63,14 +63,6 @@ export default new Router({
       component: () => import('@/views/HomeNei'),
       children:[
         {
-          path: '/author',
-          name: 'Author',
-          meta:{
-            title:'用户授权',
-          },
-          component: () => import('@/views/Author'),
-        },
-        {
           path: '/bannerDetail',
           name: 'BannerDetail',
           meta:{

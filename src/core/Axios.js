@@ -3,7 +3,7 @@
 * @Email: dxxtalking@163.com
 * @Date:   2020-07-21 09:54:12
 * @Last Modified by:   dxx
-* @Last Modified time: 2020-08-06 16:36:36
+* @Last Modified time: 2020-08-07 18:47:02
 */
 import axios from 'axios'; // 引入axios
 import qs from 'qs'; //qs是一个url参数转化（parse和stringify）的js库
@@ -13,7 +13,7 @@ import router from '@/router/index.js';
 import { Toast } from 'vant'; // 用来显示调用接口后"加载中..."的提示
 
 axios.defaults.timeout = 20000; //响应时间
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'; //配置请求头
+axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'; //配置请求头
 axios.defaults.baseURL = ''; //配置接口地址
 
 let loadingInstance;
@@ -27,10 +27,9 @@ axios.interceptors.request.use((config) => {
 	});
   //在发送请求之前做某件事
   if (config.method === 'post') {
-    //config.data.token = VueCookies.get("token");
-    config.data.token = "5f1ede989c9c8"; // 写死用户token
+    config.data.token = VueCookies.get("usertoken");
+    //config.data.token = "5f1ede989c9c8"; // 写死用户token
     config.headers.token = 'dd3e2f22a9e9f2dcf14c32628268963b'; //写死token
-
     config.data = qs.stringify(config.data);
     config.url = globalVarable.baseURL + config.url
 
@@ -44,6 +43,7 @@ axios.interceptors.request.use((config) => {
       config.url = config.url + "&_=" + new Date().getTime();
     }
   }
+
   return config;
 }, (error) => {
   console.log('错误的传参')

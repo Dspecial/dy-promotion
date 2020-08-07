@@ -3,7 +3,7 @@
 * @Email: dxxtalking@163.com
 * @Date:   2020-07-14 13:29:54
 * @Last Modified by:   dxx
-* @Last Modified time: 2020-08-07 10:25:03
+* @Last Modified time: 2020-08-07 18:22:14
 */
 @charset "UTF-8";
 /*css 初始化 */
@@ -963,11 +963,11 @@ h1,h2,h3,h4,h5,h6{
 }
 /*--- body ---*/
 .page{
-  margin-top: 46px;
+/*  margin-top: 46px;*/
   margin-bottom: 50px;
 }
 .page_nei{
-  margin-top: 46px;
+/*  margin-top: 46px;*/
 }
 .page,.page_nei{
   .van-button--default{
@@ -1166,10 +1166,10 @@ h1,h2,h3,h4,h5,h6{
   border-radius: 4px;
 }
 .c_date{
-  position: absolute;
-  left: 6.5%;
-  bottom: 28.5%;
   font-weight: 500;
+  background: #fff;
+  border-radius: 13px;
+  padding: 3px 9px;
 }
 .promotion-tabs{
   .van-tabs__nav{

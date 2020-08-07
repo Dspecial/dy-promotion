@@ -43,6 +43,21 @@ Vue.use(VueCookies);
 //   })
 // }
 
+router.beforeEach((to, from, next) => {
+    /**
+     * 缓存记录页面初始（即授权前）路径
+     * 主要用于解决在页面手动刷新时，微信授权问题
+     * hash模式：let href = window.location.origin + window.location.pathname + '#' + to.fullPath
+     * location：let href = window.location.origin + window.location.pathname + to.fullPath
+     */
+    let href = window.location.origin + window.location.pathname + '#' + to.fullPath;
+    window.localStorage.setItem('WXAuthorizeUrl', href);
+    console.log(href);
+    //...
+
+    next()
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

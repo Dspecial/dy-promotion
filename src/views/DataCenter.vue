@@ -2,9 +2,12 @@
 	<div class="page-container">
 		<!-- banner -->
 		<section class="data_ban banner">
-			<p class="fs_14 c_date text_pink-400 m-0">
-				<span class="mr-1">{{currentdate}}</span>收益数据
-			</p>
+			<div class="p-3">
+				<div class="fs_30 font-weight-black">收益排行榜</div>
+				<p class="fs_14 c_date text_pink-400 m-0 d-inline-block mt-2">
+					<span class="mr-1">{{currentdate}}</span>收益数据
+				</p>
+			</div>
 		</section>
 
 		<!-- data -->
@@ -47,14 +50,6 @@
 						title:"免费用户",
 						content:[
 							{
-								// avatar: "http://dy.weilaixxjs.cn/uploads/20200805/541431a83d05535a742872d62dd2c93a.jpg",
-								// createtime: 1596722618,
-								// id: 2,
-								// is_vip: "1",
-								// is_vip_text: "Is_vip 1",
-								// money: "5115.83",
-								// name: "sam2",
-								// updatetime: 1596722618,
 							},
 						]
 					},

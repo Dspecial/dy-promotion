@@ -3,7 +3,7 @@
 * @Email: dxxtalking@163.com
 * @Date:   2020-07-14 13:38:48
 * @Last Modified by:   dxx
-* @Last Modified time: 2020-07-21 11:21:16
+* @Last Modified time: 2020-08-07 17:48:45
 */
 
 import Vue from 'vue'
@@ -24,9 +24,14 @@ const store = new Vuex.Store({
     },
     hideLoading (state) {
       state.LOADING = false
-    }
+    },
 	},
-	
+  getters: {
+
+  },
+  actions: {
+ 
+  }
 })
 
 export default store;
