@@ -63,12 +63,12 @@ export default new Router({
       component: () => import('@/views/HomeNei'),
       children:[
         {
-          path: '/auther',
-          name: 'Auther',
+          path: '/author',
+          name: 'Author',
           meta:{
             title:'用户授权',
           },
-          component: () => import('@/views/Auther'),
+          component: () => import('@/views/Author'),
         },
         {
           path: '/bannerDetail',
