@@ -19,11 +19,11 @@
 				  				<span class="d-block">{{j+1}}</span>
 				  			</van-col>
 				  			<van-col :span="11" class="d-flex align-items-center">
-				  				<van-image width="40" height="40" round :src="cell.userAvatar" />
-				  				<span class="ml-3">{{cell.userName}}</span>
+				  				<van-image width="40" height="40" round :src="cell.avatar" />
+				  				<span class="ml-3">{{cell.name}}</span>
 				  			</van-col>
 				  			<van-col :span="11" class="text-right">
-				  				<div class="text_yellow fs_18"><span class="mr-1">{{cell.amount}}</span>元</div>
+				  				<div class="text_yellow fs_18"><span class="mr-1">{{cell.money}}</span>元</div>
 				  			</van-col>
 				  		</van-row>	
 				  	</template>
@@ -47,75 +47,20 @@
 						title:"免费用户",
 						content:[
 							{
-								userAvatar:"https://img.yzcdn.cn/vant/cat.jpeg",
-								userName:"张三",
-								amount:"112565.00"
-							},
-							{
-								userAvatar:"https://img.yzcdn.cn/vant/cat.jpeg",
-								userName:"李四",
-								amount:"10256.02"
-							},
-							{
-								userAvatar:"https://img.yzcdn.cn/vant/cat.jpeg",
-								userName:"王五",
-								amount:"10256.02"
-							},
-							{
-								userAvatar:"https://img.yzcdn.cn/vant/cat.jpeg",
-								userName:"周六",
-								amount:"10256.02"
-							},
-							{
-								userAvatar:"https://img.yzcdn.cn/vant/cat.jpeg",
-								userName:"张三",
-								amount:"112565.00"
-							},
-							{
-								userAvatar:"https://img.yzcdn.cn/vant/cat.jpeg",
-								userName:"张三",
-								amount:"112565.00"
-							},
-							{
-								userAvatar:"https://img.yzcdn.cn/vant/cat.jpeg",
-								userName:"李四",
-								amount:"10256.02"
-							},
-							{
-								userAvatar:"https://img.yzcdn.cn/vant/cat.jpeg",
-								userName:"王五",
-								amount:"10256.02"
-							},
-							{
-								userAvatar:"https://img.yzcdn.cn/vant/cat.jpeg",
-								userName:"周六",
-								amount:"10256.02"
-							},
-							{
-								userAvatar:"https://img.yzcdn.cn/vant/cat.jpeg",
-								userName:"张三",
-								amount:"112565.00"
+								// avatar: "http://dy.weilaixxjs.cn/uploads/20200805/541431a83d05535a742872d62dd2c93a.jpg",
+								// createtime: 1596722618,
+								// id: 2,
+								// is_vip: "1",
+								// is_vip_text: "Is_vip 1",
+								// money: "5115.83",
+								// name: "sam2",
+								// updatetime: 1596722618,
 							},
 						]
 					},
 					{
 						title:"付费会员",
 						content:[
-							{
-								userAvatar:"https://img.yzcdn.cn/vant/cat.jpeg",
-								userName:"李四",
-								amount:"10256.02"
-							},
-							{
-								userAvatar:"https://img.yzcdn.cn/vant/cat.jpeg",
-								userName:"王五",
-								amount:"10256.02"
-							},
-							{
-								userAvatar:"https://img.yzcdn.cn/vant/cat.jpeg",
-								userName:"周六",
-								amount:"10256.02"
-							},
 						]
 					},
 				],
@@ -123,9 +68,28 @@
 		},
 		components: {},
 		mounted(){
-			this.getNowFormatDate();
+			//this.getNowFormatDate(); //不需要了，从后台获取
+			this.onLoad();
 		},
 		methods:{
+
+			onLoad(){
+				this.MyAxios.post("/api/wechat/ranking/index",{
+
+				}).then(data => {
+					if (data.code == 0) {
+						this.currentdate = data.data.title;
+						this.dataTabCard[0].content = data.data.is_free_list;
+						this.dataTabCard[1].content = data.data.is_vip_list;
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
+			},
+			// 当天日期
 			getNowFormatDate() {
         var date = new Date();
         var seperator1 = "-";
@@ -143,7 +107,7 @@
     	},
     	// tab切换
     	onTabClick(name,title){
-				this.$toast(name);
+				//this.$toast(name);
 			},
 		},
 	}

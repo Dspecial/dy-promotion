@@ -76,7 +76,7 @@
 		
 		<!-- 个人收益 -->
 		<section class="mt-4">
-			<h4 class="m-0 fs_18">个人收益 <van-icon class-prefix="icon" name="loop3" size="15" color="#fff"/></h4>
+			<h4 class="m-0 fs_18">个人收益 <van-icon class-prefix="icon" name="loop3" size="15" color="#fff" @click="upDate" :class="isUpdate ? 'spinner' : '' "/></h4>
 			<!-- 日期下拉选择 -->
 			<vant-field-date
 				class="mt-3"
@@ -87,36 +87,37 @@
 			  :max-date="maxDate"
 			  @change="onChange"
 			/>
-			<p class="m-0 fs_12 opacity-60 mt-3">07月份数据统计中，目前收益100元，预计08月31日发放</p>
+			<p class="m-0 fs_12 opacity-60 mt-3">{{CPMinfo.title}}</p>
 
 			<div class="mt-4 bg_dark-400 p-3">
 				<h4 class="m-0 fs_16">今日CPM收益 <van-icon class-prefix="icon" name="question3" size="10" color="#fff"/></h4>
 				<van-row :gutter="15" class="mt-3">
 					<van-col :span="12" class="text-center">
-						<span class="fs_14 opacity-60 d-inline-block mr-2 font-weight-normal">本日预估收益</span>
-						<span class="fs_18">10</span>
+						<span class="fs_14 opacity-60 d-inline-block mr-2 font-weight-normal" v-if="CPMinfo.state == 1">本日收益</span>
+						<span class="fs_14 opacity-60 d-inline-block mr-2 font-weight-normal" v-else>本日预估收益</span>
+						<span class="fs_18">{{CPMinfo.current_day_money}}</span>
 					</van-col>
 					<van-col :span="12" class="text-center">
 						<span class="fs_14 opacity-60 d-inline-block mr-2 font-weight-normal">本月收益</span>
-						<span class="fs_18">10</span>
+						<span class="fs_18">{{CPMinfo.current_all_money}}</span>
 					</van-col>
 				</van-row>
 
 				<van-row :gutter="5" class="mt-4">
 					<van-col :span="6" class="text-center">
-						<h5 class="m-0 fs_16">60</h5>
+						<h5 class="m-0 fs_16">{{CPMinfo.view_count}}</h5>
 						<p class="fs_14 opacity-60 m-0 mt-2 font-weight-normal">今日访问量</p>
 					</van-col>
 					<van-col :span="6" class="text-center">
-						<h5 class="m-0 fs_16">80</h5>
+						<h5 class="m-0 fs_16">{{CPMinfo.play_count}}</h5>
 						<p class="fs_14 opacity-60 m-0 mt-2 font-weight-normal">广告完播量</p>
 					</van-col>
 					<van-col :span="6" class="text-center">
-						<h5 class="m-0 fs_16">30-200</h5>
+						<h5 class="m-0 fs_16">{{CPMinfo.ecpm_today}}</h5>
 						<p class="fs_14 opacity-60 m-0 mt-2 font-weight-normal">预估eCPM</p>
 					</van-col>
 					<van-col :span="6" class="text-center">
-						<h5 class="m-0 fs_16">130.00</h5>
+						<h5 class="m-0 fs_16">{{CPMinfo.ecpm_yes}}</h5>
 						<p class="fs_14 opacity-60 m-0 mt-2 font-weight-normal">昨日eCPM</p>
 					</van-col>
 				</van-row>
@@ -129,15 +130,15 @@
 				  	<!-- 收益 -->
 						<van-row :gutter="5" class="mt-4">
 							<van-col :span="8" class="text-center">
-								<h5 class="m-0 fs_18">{{tab.income.total}}</h5>
+								<h5 class="m-0 fs_18">{{tab.info.total}}</h5>
 								<p class="fs_14 opacity-60 m-0 mt-2 font-weight-normal">本小程序总收益</p>
 							</van-col>
 							<van-col :span="8" class="text-center">
-								<h5 class="m-0 fs_18">{{tab.income.yesterday}}</h5>
+								<h5 class="m-0 fs_18">{{tab.info.yesterday}}</h5>
 								<p class="fs_14 opacity-60 m-0 mt-2 font-weight-normal">昨日收益</p>
 							</van-col>
 							<van-col :span="8" class="text-center">
-								<h5 class="m-0 fs_18">{{tab.income.today}}</h5>
+								<h5 class="m-0 fs_18">{{tab.info.today}}</h5>
 								<p class="fs_14 opacity-60 m-0 mt-2 font-weight-normal">今日完播量</p>
 							</van-col>
 						</van-row>
@@ -150,11 +151,11 @@
 					  				<span class="d-block">{{j+1}}</span>
 					  			</van-col>
 					  			<van-col :span="12" class="d-flex align-items-center">
-					  				<van-image width="35" height="35" round :src="cell.userAvatar" />
-					  				<span class="ml-3 fs_16">{{cell.userName}}</span>
+					  				<van-image width="35" height="35" round :src="cell.avatar" />
+					  				<span class="ml-3 fs_16">{{cell.name}}</span>
 					  			</van-col>
 					  			<van-col :span="11" class="text-right">
-					  				<div class="fs_16">¥<span class="ml-1">{{cell.amount}}</span></div>
+					  				<div class="fs_16">¥<span class="ml-1">{{cell.money}}</span></div>
 					  			</van-col>
 					  		</van-row>
 					  	</template>
@@ -187,50 +188,13 @@
 				pCodeShow:false, // 下载程序码
 				codeImg:"",
 
+				isUpdate:false,// 是否更新
 	      minDate: new Date(2020, 0, 1),
-	      maxDate: new Date(2020, 11, 31),
+	      maxDate: new Date(),
 	      currentDate: "2020-07-16",
+	      CPMinfo:{
+	      },
 	      dataTabCard:[
-					{
-						title:"直推团队收益",
-						income:{
-							total: "0.12",
-							yesterday:"0.10",
-							today:"0.00"
-						},
-						cellList:[
-							{
-								userAvatar:"https://img.yzcdn.cn/vant/cat.jpeg",
-								userName:"张三",
-								amount:"0.11"
-							},
-							{
-								userAvatar:"https://img.yzcdn.cn/vant/cat.jpeg",
-								userName:"李四",
-								amount:"0.15"
-							},
-						]
-					},
-					{
-						title:"间接团队收益",
-						income:{
-							total: "0.65",
-							yesterday:"0.20",
-							today:"0.15"
-						},
-						cellList:[
-							{
-								userAvatar:"https://img.yzcdn.cn/vant/cat.jpeg",
-								userName:"张三",
-								amount:"0.08"
-							},
-							{
-								userAvatar:"https://img.yzcdn.cn/vant/cat.jpeg",
-								userName:"李四",
-								amount:"0.12"
-							},
-						]
-					},
 				],
 			}
 		},
@@ -241,6 +205,9 @@
 			this.id = this.$route.query.id;
 			this.onLoadProDetails();
 			this.loadProChildData();
+			this.getNowFormatDate();// 获取当天的日期
+			// 个人收益
+			this.onLoadGain(this.currentDate);
 		},
 		methods:{
 			onLoadProDetails(){
@@ -248,7 +215,6 @@
 					id:this.id
 				}).then(data => {
 					if (data.code == 0) {
-						//console.log(data);
 						this.product_info = data.data.product_info;
 					} else {
 						this.$notify({
@@ -324,14 +290,57 @@
 					}
 				})
 			},
+
+			// 获取当天的日期
+			getNowFormatDate() {
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+          month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+          strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        this.currentDate = currentdate;
+    	},
+
+			// 获取个人收益
+			onLoadGain(date){
+				this.MyAxios.post("/api/wechat/income/person_income",{
+					id:this.id,
+					date:date,
+				}).then(data => {
+					if (data.code == 0) {
+						this.CPMinfo = data.data.info;
+						this.dataTabCard = data.data.list;
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
+			},
 			// tab切换
     	onTabClick(name,title){
-				this.$toast(name);
+				//this.$toast(name);
 			},
 			// 日期下拉框值发生改变以后，@change 是接收的子组件的方法
 			onChange(val1,val2,val3){ // val1是毫秒数，val2是原始值，val3是格式过的"yyyy-MM-dd"
-				console.log(val3);
+				this.onLoadGain(val3);
 			},
+			// 更新数据
+			upDate(){
+				this.isUpdate = true;
+				setTimeout(()=>{
+					this.isUpdate = false;
+					this.onLoadGain(this.currentDate);
+				},2000)
+			}
 		}
 	}
 </script>

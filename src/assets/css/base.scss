@@ -3,7 +3,7 @@
 * @Email: dxxtalking@163.com
 * @Date:   2020-07-14 13:29:54
 * @Last Modified by:   dxx
-* @Last Modified time: 2020-08-06 18:19:11
+* @Last Modified time: 2020-08-07 10:25:03
 */
 @charset "UTF-8";
 /*css 初始化 */
@@ -1684,8 +1684,55 @@ h1,h2,h3,h4,h5,h6{
 .default_img .van-image img{
   width: 310px;
 }
-
+/*下载码弹框*/
 .codeDialog img{
   width: 80%;
   height: auto;
+}
+
+/*图标旋转*/
+.spinner {
+  display: inline-block;
+  -webkit-animation: rotation 1s linear infinite;
+  animation: rotation 1s linear infinite; 
+}
+@-webkit-keyframes rotation {
+
+  0% {
+    -webkit-transform: rotate(0deg); 
+  }
+  100% {
+    -webkit-transform: rotate(360deg); 
+  } 
+}
+
+@keyframes rotation {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); 
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); 
+  } 
+}
+
+@-webkit-keyframes rotation_reverse {
+  0% {
+    -webkit-transform: rotate(0deg); 
+  }
+  100% {
+    -webkit-transform: rotate(-360deg); 
+  } 
+}
+
+@keyframes rotation_reverse {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); 
+  }
+  100% {
+    -webkit-transform: rotate(-360deg);
+    transform: rotate(-360deg); 
+  } 
 }

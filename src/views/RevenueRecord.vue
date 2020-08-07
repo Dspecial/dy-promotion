@@ -48,7 +48,7 @@
 			return {
 				minDate: new Date('2020/01'),
 	      maxDate: new Date(),
-	      currentDate: "2020-08",
+	      currentDate: "2020-05",
 				release:"600.00",
 				mounthlyRecords:[
 				],
@@ -58,34 +58,37 @@
 			VantFieldDate,
 		},
 		mounted(){
-			this.onload();
-			this.getRevenue();
+			this.getNowFormatDate();
+			this.getRevenue(this.currentDate);
 		},
 		methods:{
-			// 获取月份
-			onload(){
-				this.MyAxios.post("/api/wechat/income/record",{
+			// 获取当月月份
+			getNowFormatDate() {
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+          month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+          strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month;
+        this.currentDate = currentdate;
+    	},
 
-				}).then(data => {
-					if (data.code == 0) {
-						var lastDate = data.data.month_list[data.data.month_list.length - 1];
-						var changeDate = lastDate.replace("-","/"); 
-						this.minDate = new Date(changeDate);
-						this.currentDate = data.data.month_list[0];
-					} else {
-						this.$notify({
-              message: data.msg,
-              type: 'warning'
-            });
-					}
-				})
-			},
 			// 获取收益记录
 			getRevenue(date){
 				this.MyAxios.post("/api/wechat/income/record",{
 					date:date,
 				}).then(data => {
 					if (data.code == 0) {
+						var lastDate = data.data.month_list[data.data.month_list.length - 1];
+						var changeDate = lastDate.replace("-","/"); 
+						this.minDate = new Date(changeDate);
+
 						this.release = data.data.sum_money;
 						this.mounthlyRecords = data.data.list;
 					} else {
