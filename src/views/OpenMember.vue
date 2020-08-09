@@ -18,7 +18,7 @@
 		</section>
 
 		<!-- notice -->
-		<van-notice-bar class="mt-3 border-radius-4" 
+<!-- 		<van-notice-bar class="mt-3 border-radius-4" 
 			color="#fff" 
 			background="transparent" 
 			:scrollable="false">
@@ -44,7 +44,7 @@
 		    	</div>
 		  	</van-swipe-item>
 		  </van-swipe>
-		</van-notice-bar>
+		</van-notice-bar> -->
 
 		<section class="mt-4">
 			<h4 class="m-0 fs_18">开通会员&优势</h4>
@@ -126,9 +126,9 @@
 				profile:{},
 				// 负责人
 				director:{
-					avatar: "https://img.yzcdn.cn/vant/apple-2.jpg",
-					name: "抖推猫",
-					wx_name: "doutuimao"
+					// avatar: "https://img.yzcdn.cn/vant/apple-2.jpg",
+					// name: "抖推猫",
+					// wx_name: "doutuimao"
 				},
 				swipeNotice:[
 					{
@@ -201,18 +201,20 @@
 			Document
 		},
 		mounted(){
-			
+			this.directorLoad();
 		},
 		inject:['reload'],
 		methods:{
 			// 获取负责人信息
 			directorLoad(){
-				this.MyAxios.post("",{
+				this.MyAxios.post("/api/wechat/user/index",{
 
 				}).then(data => {
 					console.log(data);
 					if (data.code == 0) {
-						// ...
+						if(data.data.agent_info){
+							this.director = data.data.agent_info;
+						}
 					} else {
 						this.$notify({
               message: data.msg,
@@ -268,7 +270,7 @@
 	    onInviteSubmit(){
 	    	this.showDialog = false;
 	    	// 这里需要一个接口拿到负责人的信息
-	    	//this.directorLoad();
+	    	this.directorLoad();
 	    },
 		},
 	}

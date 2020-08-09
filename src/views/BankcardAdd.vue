@@ -58,30 +58,29 @@
 							    v-model="tab.cardNum"
 							    :label="index==0?'银行卡账号':'支付宝账号'"
 							    :name="index==0?'银行卡账号':'支付宝账号'"
-							    :placeholder="'请输入您的' + index==0?'银行卡账号':'支付宝账号'"
+							    :placeholder="index==0?'请输入您的银行卡账号':'请输入您的支付宝账号'"
 							    required
 							    :border="false"
 							    :error="false"
 							    :rules="[{ required: true, message: index==0?'请填写您的银行卡账号':'请填写您的支付宝账号' }]"
 							  />
 					  	</div>
+							<van-field
+						  	class="d-flex flex-wrap"
+						    v-model="mobile"
+						    :label="index==0?'银行卡预留手机号':'支付宝绑定的手机号'"
+							  :name="index==0?'银行卡预留手机号':'支付宝绑定的手机号'"
+						    :placeholder="index==0?'请输入您的银行卡预留手机号':'请输入您的支付宝绑定的手机号'"
+						    type="tel"
+						    required
+						    :border="false"
+						    :error="false"
+						    :rules="[{ required: true, message: index==0?'请填写您的银行卡预留手机号':'请输入您的支付宝绑定的手机号' }]"
+						  />
 					  	<!-- /ITEM -->
 					  </van-tab>
 					</van-tabs>
 				</section>
-				
-				<van-field
-			  	class="d-flex flex-wrap"
-			    v-model="mobile"
-			    label="银行卡预留手机号"
-			    name="银行卡预留手机号"
-			    placeholder="请输入您的银行卡预留手机号"
-			    type="tel"
-			    required
-			    :border="false"
-			    :error="false"
-			    :rules="[{ required: true, message: '请填写您的银行卡预留手机号' }]"
-			  />
 
 				<div class="d-flex align-items-center">
 					<div class="mr-2">

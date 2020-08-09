@@ -9,10 +9,18 @@
 		  	<div class="fs_18 font-weight-normal">{{profile.name}}</div>
 		  	<div class="fs_12 font-weight-normal mt-2">手机号：<span>{{profile.mobile}}</span></div>
 		  </van-col>
-		  <van-col class="text-center">
+		  <van-col class="text-center" @click="showQR">
 		  	<van-icon name="qr" size="36"/>
 		  	<p class="m-0">关注公众号</p>
 		  </van-col>
+
+			<!-- 公众号图片 -->
+			<van-dialog v-model="qrShow" title="关注公众号" :show-cancel-button="false" :showConfirmButton="false" :closeOnClickOverlay="true" class="codeDialog">
+				<div class="text-center pt-3 pb-3">
+				  <img :src="qrImg" />
+				  <p class="m-0 opacity-60 mt-2">长按图片保存到相册</p>
+			  </div>
+			</van-dialog>				
 		</van-row>
 
 		<!-- 邀请码 -->
@@ -86,7 +94,7 @@
 		<!-- 我的团队 -->
 		<section class="mt-4">
 			<h3 class="fs_18 m-0">我的团队</h3>
-			<div class="mt-3 bg_dark-400 official" v-if="profile.is_vip == 2">
+			<div class="mt-3 bg_dark-400 official">
 				<div class="d-flex justify-content-between align-items-center p-3">
 					<div class="d-flex align-items-center">
 						<van-image round width="45" height="45" :src="director.avatar" />
@@ -117,19 +125,22 @@
 						</router-link>
 					</van-col>
 					<van-col span="6" class="text-center">
-						<router-link :to="''">	
+						<div
+							v-clipboard:copy="serviceWechat"
+        			v-clipboard:success="onCopy"
+        			v-clipboard:error="onError">	
 							<van-image width="35" height="35" :src="require('@/assets/images/recruit_service.png')" />
 							<p class="m-0 mt-1 font-weight-normal">在线客服</p>
-						</router-link>
+						</div>
 					</van-col>
 					<van-col span="6" class="text-center">
-						<router-link :to="''"
+						<div
 							v-clipboard:copy="teamWechat"
         			v-clipboard:success="onCopy"
         			v-clipboard:error="onError">	
 							<van-image width="35" height="35" :src="require('@/assets/images/recruit_group.png')" />
 							<p class="m-0 mt-1 font-weight-normal">加入群聊</p>
-						</router-link>
+						</div>
 					</van-col>
 				</van-row>
 				<!-- 是会员 -->
@@ -198,6 +209,8 @@
 				// 个人信息
 				profile:{
 				},
+				qrShow:false,
+				qrImg:'https://img.yzcdn.cn/vant/apple-2.jpg',
 				// 收益
 				withdraw:{
 				},
@@ -208,7 +221,7 @@
 					// name: "暂无",
 					// wx_name: "暂无"
 				},
-
+				serviceWechat:'客服的微信',
 				teamWechat:"微信群的ID",
 				weChatInputShow:false,
 				wxName:"",
@@ -217,6 +230,8 @@
 		components: {},
 		mounted(){
 			this.onLoad();
+			this.service();
+			this.addTeam();
 		},
 		methods:{
 			// 获取个人信息
@@ -224,12 +239,11 @@
 				this.MyAxios.post("/api/wechat/user/index",{
 
 				}).then(data => {
-					//console.log(data);
+					console.log(data);
 					if (data.code == 0) {
 						this.profile = data.data.customer_info;
 						this.withdraw = data.data.money_data;
 						this.director = data.data.agent_info;
-
 						if(this.isEmpty(this.profile.mobile)){
 							this.profile.mobile = "请绑定手机号"
 						};
@@ -241,9 +255,24 @@
 					}
 				})
 			},
+			// 关注公众号
+			showQR(){
+				this.MyAxios.post("/api/wechat/base/get_base_info",{
+					id:39,
+				}).then(data => {
+					if (data.code == 0) {
+						this.qrShow = true;
+						this.qrImg = data.data.value;
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
+			},
 			// 绑定微信号
 			bindWeChat(){
-				console.log(this.wxName);
 				this.MyAxios.post("/api/wechat/user/edit_wx",{
 					//token:"",
 					wx_name:this.wxName,
@@ -272,6 +301,46 @@
 					});
 				};
 				console.log("邀请好友");
+			},
+			// 在线客服
+			service(){
+				this.MyAxios.post("/api/wechat/base/get_base_info",{
+					id:21,
+				}).then(data => {
+					if (data.code == 0) {
+						if(this.isEmpty(data.data.value)){
+							this.serviceWechat = "null";
+						}
+						else{
+							this.serviceWechat = data.data.value;
+						}
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
+			},
+			// 加入群聊
+			addTeam(){
+				this.MyAxios.post("/api/wechat/base/get_base_info",{
+					id:40,
+				}).then(data => {
+					if (data.code == 0) {
+						if(this.isEmpty(data.data.value)){
+							this.teamWechat = "null";
+						}
+						else{
+							this.teamWechat = data.data.value;
+						}
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
 			},
 			// 复制到粘贴板成功
 			onCopy: function (e) {

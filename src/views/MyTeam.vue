@@ -54,18 +54,12 @@
 				loading: false,
       	finished: false,
 				teamTabCard:[
-					{
-						title:"潜在用户",
-						tips:"以下粉丝将为您锁粉24小时，如果24小时内未开通或未绑定抖音号，后续时间付款开通VIP或绑定抖音号，所得收益可能归其他人所有。",
-						teamList:[
-							// {
-							// 	avatar:"https://img.yzcdn.cn/vant/cat.jpeg",
-							// 	name:"张三",
-							// 	wx_name:"zhangsan",
-							// 	createtime:"2020-07-18 16:00",
-							// },
-						]
-					},
+					// {
+					// 	title:"潜在用户",
+					// 	tips:"以下粉丝将为您锁粉24小时，如果24小时内未开通或未绑定抖音号，后续时间付款开通VIP或绑定抖音号，所得收益可能归其他人所有。",
+					// 	teamList:[
+					// 	]
+					// },
 					{
 						title:"已绑定",
 						tips:"已经授权绑定抖音号，将永久是您的团队成员",
@@ -93,8 +87,8 @@
 				}).then(data => {
 					console.log(data);
 					if (data.code == 0) {
-						this.teamTabCard[1].teamList = data.data.already_bind_list;
-						this.teamTabCard[2].teamList = data.data.vip_list;
+						this.teamTabCard[0].teamList = data.data.already_bind_list;
+						this.teamTabCard[1].teamList = data.data.vip_list;
 						this.finished = true; // 此处若有分页要重新修改
 					} else {
 						this.$notify({

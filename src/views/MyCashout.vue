@@ -91,6 +91,14 @@
 						alipay: "",
 						type_text: "微信",
 					},
+					// {
+					// 	type:1,
+					// 	id:"",
+					// 	truename:"sam",
+					// 	bank_code:"121212",
+					// 	alipay: "",
+					// 	type_text: "建行",
+					// },
 				],
 			}
 		},
@@ -118,7 +126,9 @@
 			onLoadBank(){
 				this.MyAxios.post("/api/wechat/deposit/index",{
 				}).then(data => {
-					console.log(data);
+					console.log(data,'data');
+
+
 					if (data.code == 0) {
 						this.cashOutAccount.push(...data.data);
 					} else {
@@ -130,7 +140,6 @@
 				})
 			},
 			onConfirm(value) {
-				console.log(value);
 	      this.cashOutText = value.type_text;
 	      this.logoType = value.type;
 	      this.cashOutId = value.id;

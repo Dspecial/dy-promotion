@@ -124,10 +124,10 @@
 			</div>
 
 			<!-- 团队收益 -->
-			<div class="mt-4 promotion-tabs">
+<!-- 			<div class="mt-4 promotion-tabs">
 				<van-tabs type="card" @click="onTabClick">
 				  <van-tab v-for="(tab,index) in dataTabCard" :key="index" :title="tab.title" class="proDetail_tab_content">
-				  	<!-- 收益 -->
+
 						<van-row :gutter="5" class="mt-4">
 							<van-col :span="8" class="text-center">
 								<h5 class="m-0 fs_18">{{tab.info.total}}</h5>
@@ -142,8 +142,7 @@
 								<p class="fs_14 opacity-60 m-0 mt-2 font-weight-normal">今日完播量</p>
 							</van-col>
 						</van-row>
-
-				  	<!-- 列表 -->
+						
 				  	<div class="mt-4">
 					  	<template v-for="(cell,j) in tab.cellList">
 					  		<van-row type="flex" justify="space-between" align="center" class="pt-2 pb-2 pl-3 pr-3 mb-3 data_item bg_dark-400">
@@ -160,11 +159,9 @@
 					  		</van-row>
 					  	</template>
 				  	</div>	
-				  	<!-- /列表 -->
-
 				  </van-tab>
 				</van-tabs>
-			</div>
+			</div> -->
 		</section>
 	</div>
 </template>

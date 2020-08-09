@@ -207,6 +207,8 @@
 			this.indexBanner();
 			// 公告列表
 			this.indexNoticeList();
+			// 会员群
+			this.addTeam();
 			// 产品列表分类
 			this.loadProCate();
 		},
@@ -253,7 +255,26 @@
 			toNoticeDetail(notice){
 				this.$router.push("/noticeDetail?id="+notice.id);
 			},
-			
+			// 会员群
+			addTeam(){
+				this.MyAxios.post("/api/wechat/base/get_base_info",{
+					id:40,
+				}).then(data => {
+					if (data.code == 0) {
+						if(this.isEmpty(data.data.value)){
+							this.membership = "null";
+						}
+						else{
+							this.membership = data.data.value;
+						}
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
+			},
 			// 产品列表分类
 			loadProCate(){
 				this.MyAxios.post("/api/wechat/products/index",{
@@ -356,6 +377,15 @@
 	    onError: function (e) {
 	      this.$toast.fail("复制失败");
 	    },
+
+	    // 判断是否为空字符串
+			isEmpty(obj){
+	    	if(typeof obj == "undefined" || obj == null || obj == ""){
+			  	return true;
+		    }else{
+		    	return false;
+		    }
+			},
 		},
 	}
 </script>

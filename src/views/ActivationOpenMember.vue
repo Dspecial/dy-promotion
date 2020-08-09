@@ -24,7 +24,7 @@
 			</van-form>
 		</section>
 		<p class="m-0 mt-3 font-weight-normal text_yellow-400 fs_12">官方财源广进激活码唯一购途径，联系团队负责人购买，统一价
-格为298元！</p>
+格为<span>{{price}}</span>元！</p>
 
 		<!-- 负责人 -->
 		<section class="bg_dark-400 official mt-3" v-if="profile.is_vip == 2">
@@ -70,6 +70,7 @@
 					name: "李王",
 					wx_name: "liwang"
 				},
+				price:"",
 				// 激活码
 				active_code: '',
 			}
@@ -77,6 +78,7 @@
 		components: {},
 		mounted(){
 			this.onLoad();
+			this.onPrice();
 		},
 		methods:{
 			// 获取个人信息
@@ -84,10 +86,23 @@
 				this.MyAxios.post("/api/wechat/user/index",{
 
 				}).then(data => {
-					console.log(data);
 					if (data.code == 0) {
 						this.profile = data.data.customer_info;
 						this.director = data.data.agent_info;
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
+			},
+			onPrice(){
+				this.MyAxios.post("/api/wechat/base/get_base_info",{
+					id:38,
+				}).then(data => {
+					if (data.code == 0) {
+						this.price = data.data.value
 					} else {
 						this.$notify({
               message: data.msg,
