@@ -98,6 +98,7 @@
 					}
 				})
 			},
+			// 视频播放
 			playVideo(video){
 				this.videoShow = true;
 				this.Player = new Player({
@@ -112,6 +113,7 @@
 	        playsinline: true,
 	      });
 			},
+			// 关闭视频
 			closeVideo(){
 				this.videoShow = false;
 				this.Player.destroy(document.querySelector('#vs')); // 关闭的时候销毁播放器

@@ -3,7 +3,7 @@
 * @Email: dxxtalking@163.com
 * @Date:   2020-07-14 13:29:54
 * @Last Modified by:   dxx
-* @Last Modified time: 2020-08-07 18:22:14
+* @Last Modified time: 2020-08-10 14:49:09
 */
 @charset "UTF-8";
 /*css 初始化 */
@@ -1735,4 +1735,34 @@ h1,h2,h3,h4,h5,h6{
     -webkit-transform: rotate(-360deg);
     transform: rotate(-360deg); 
   } 
+}
+
+/*商学院*/
+.lesson_list{
+  border-top:1px solid #5E5E7F;
+}
+.lesson_cell{
+  .lesson_left{
+    width: 40%;
+    height: 100%;
+    img{
+      width: 100%;
+    }
+    .ban_paly{
+      height: 35px;
+      width: 35px;
+    }
+    .ban_paly .van-icon{
+      font-size:20px;
+    }
+  }
+  .lesson_right{
+    width: 56%;
+    .author_info .van-image__img{
+      border-radius: 50%;
+    }
+    .van-button{
+      height: 30px;
+    }
+  }
 }

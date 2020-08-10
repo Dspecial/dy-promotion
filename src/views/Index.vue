@@ -37,7 +37,7 @@
 		<section class="mt-3">
 			<van-row :gutter="15" type="flex" justify="space-between" align="center">
 			  <van-col span="12">
-			  	<router-link class="link_item link_item1 text-center" :to="''">
+			  	<router-link class="link_item link_item1 text-center" :to="'businessSchool'">
 			  		<span class="fs_18">商学院</span>
 			  	</router-link>
 			  </van-col>

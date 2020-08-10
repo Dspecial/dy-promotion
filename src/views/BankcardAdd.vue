@@ -17,7 +17,6 @@
 			    required
 			    :border="false"
 			    :error="false"
-			    :rules="[{ required: true, message: '请填写您的真实姓名' }]"
 			  />
 			  <van-field
 			  	class="d-flex flex-wrap"
@@ -28,7 +27,6 @@
 			    required
 			    :border="false"
 			    :error="false"
-			    :rules="[{ required: true, message: '请填写您的身份证号码' }]"
 			  />
 
 				<section class="promotion-tabs">
@@ -49,7 +47,6 @@
 								  required
 							    :border="false"
 							    :error="false"
-							    :rules="[{ required: true, trigger:'onChange',message: '请选择办卡银行' }]"
 								  @click="showPicker = true"
 								/>
 
@@ -62,7 +59,6 @@
 							    required
 							    :border="false"
 							    :error="false"
-							    :rules="[{ required: true, message: index==0?'请填写您的银行卡账号':'请填写您的支付宝账号' }]"
 							  />
 					  	</div>
 							<van-field
@@ -75,7 +71,6 @@
 						    required
 						    :border="false"
 						    :error="false"
-						    :rules="[{ required: true, message: index==0?'请填写您的银行卡预留手机号':'请输入您的支付宝绑定的手机号' }]"
 						  />
 					  	<!-- /ITEM -->
 					  </van-tab>
@@ -161,6 +156,7 @@
 	    // tab切换
     	onTabClick(name,title){
 				this.submitType = name + 1;
+				console.log(this.submitType);
 			},
 			// 获取银行列表
 			loadBank(){
@@ -184,7 +180,6 @@
 	    // 提交
 			onSubmit(values) {
 				if(this.checkbox){
-					//console.log('submit', values);
 					this.addBankcard();
 	    	}else{
 	    		this.$dialog.confirm({
@@ -206,10 +201,9 @@
 					alipay: this.bankTabCard[1].cardNum, // 支付宝账号,当type为2时必传
 					mobile: this.mobile, // 预留手机号
 				}).then(data => {
-					//console.log(data);
 					if (data.code == 0) {
             this.$toast.success({
-							message:"添加银行卡成功",
+							message:"添加成功",
 							duration:2000,
 							onClose:function(){
 								_this.$router.go(-1);

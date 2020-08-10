@@ -92,8 +92,8 @@
 	  	<Document :protocolid="protocolid"></Document>
 		</van-dialog>
 
-		<!-- 填写邀请码 -->
-		<van-dialog v-model="showDialog" class="p-3 dialog_onInvite"
+		<!-- 填写邀请码 这个不要了-->
+<!-- 		<van-dialog v-model="showDialog" class="p-3 dialog_onInvite"
 			width="300"
 			title="填写邀请码" 
 			:show-confirm-button="false" 
@@ -113,7 +113,7 @@
 			  </div>
 			  <p class="m-0 fs_12 opacity-40 mt-3">说明：邀请码填写后不可更改，请确认后填写</p>
 			</van-form>
-		</van-dialog>
+		</van-dialog> -->
 	</div>
 </template>
 
@@ -193,7 +193,7 @@
 				protocolid:"25",
 				protocolDialog:false,
 
-				showDialog: true,
+				//showDialog: true,
 				inpuInvitationCode:"",
 			}
 		},
@@ -233,31 +233,9 @@
 	    },
 	    // 激活开通会员
 	    onOpenSubmit(value) {
-	    	// 还要判断一下邀请码有没有填写
-	    	// ...
 	    	var _this = this;
 	    	if(value){
-		    	this.MyAxios.post("/api/wechat/user/active_code",{
-		    		active_code:this.inpuInvitationCode
-					}).then(data => {
-						console.log(data);
-						if (data.code == 0) {
-							this.$router.push("activationOpenMember");
-						} else {
-							this.$toast.fail({
-								message:data.msg,
-								duration:5000,
-								onClose:function(){
-									_this.reload(); // 重新刷新页面
-								},
-							});
-							this.$notify({
-	              message: data.msg,
-	              type: 'warning'
-	            });
-						}
-					})
-	    		
+	    		this.$router.push("activationOpenMember");
 	    	}else{
 	    		this.$dialog.confirm({
 					  title: '温馨提示',
@@ -266,9 +244,9 @@
 					})
 	    	}
     	},
-			// 提交邀请码
+			// 提交邀请码 (跳转到下一个页面，填写招财进宝激活码)
 	    onInviteSubmit(){
-	    	this.showDialog = false;
+	    	//this.showDialog = false;
 	    	// 这里需要一个接口拿到负责人的信息
 	    	this.directorLoad();
 	    },

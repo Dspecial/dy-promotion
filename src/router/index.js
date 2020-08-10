@@ -71,6 +71,22 @@ export default new Router({
           component: () => import('@/views/BannerDetail'),
         },
         {
+          path: '/businessSchool',
+          name: 'BusinessSchool',
+          meta:{
+            title:'商学院',
+          },
+          component: () => import('@/views/BusinessSchool'),
+        },
+        {
+          path: '/businessDetail',
+          name: 'BusinessDetail',
+          meta:{
+            title:'课程详情',
+          },
+          component: () => import('@/views/BusinessDetail'),
+        },
+        {
           path: '/introduction',
           name: 'IntroductionVideo',
           meta:{

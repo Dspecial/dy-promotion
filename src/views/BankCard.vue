@@ -12,7 +12,7 @@
 						<div class="border-radius-large bank_logo d-flex justify-content-center align-items-center">
 							<van-image width="25" height="25" :src="cell.type == 2?alipayLogo:bankLogo" />
 						</div>
-						<span class="fs_16 font-weight-normal ml-2">{{cell.type_text}}</span>
+						<span class="fs_16 font-weight-normal ml-2">{{cell.type == 1?cell.bank_name:cell.type_text}}</span>
 					</van-col>
 					<van-col>
 						<span class="font-weight-normal"><i class="badge bg_green"></i>审核通过</span>
@@ -74,7 +74,6 @@
 			onLoad(){
 				this.MyAxios.post("/api/wechat/deposit/index",{
 				}).then(data => {
-					//console.log(data);
 					if (data.code == 0) {
 						var list = [];
 						data.data.map((item,index)=>{

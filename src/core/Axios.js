@@ -3,7 +3,7 @@
 * @Email: dxxtalking@163.com
 * @Date:   2020-07-21 09:54:12
 * @Last Modified by:   dxx
-* @Last Modified time: 2020-08-09 17:55:45
+* @Last Modified time: 2020-08-10 15:14:55
 */
 import axios from 'axios'; // 引入axios
 import qs from 'qs'; //qs是一个url参数转化（parse和stringify）的js库
@@ -29,7 +29,7 @@ axios.interceptors.request.use((config) => {
   if (config.method === 'post') {
     config.headers.token = 'dd3e2f22a9e9f2dcf14c32628268963b'; //写死token
     config.data.token = VueCookies.get("usertoken");
-    //config.data.token = "5f1ede989c9c8"; // 写死用户token
+    // config.data.token = "5f1ede989c9c8"; // 写死用户token，测试用
     config.data = qs.stringify(config.data);
     config.url = globalVarable.baseURL + config.url
 

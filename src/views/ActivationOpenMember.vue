@@ -27,7 +27,7 @@
 格为<span>{{price}}</span>元！</p>
 
 		<!-- 负责人 -->
-		<section class="bg_dark-400 official mt-3" v-if="profile.is_vip == 2">
+		<section class="bg_dark-400 official mt-3">
 			<div class="d-flex justify-content-between align-items-center p-3">
 				<div class="d-flex align-items-center">
 					<van-image round width="45" height="45" :src="director.avatar" />
@@ -60,15 +60,15 @@
 			return {
 				// 个人信息
 				profile:{
-					name: "片刻安静",  //微信昵称
-					avatar: "https://img.yzcdn.cn/vant/cat.jpeg", //头像
-					wx_name: "piankeanjingsss",  //微信名
+					// name: "片刻安静",  //微信昵称
+					// avatar: "https://img.yzcdn.cn/vant/cat.jpeg", //头像
+					// wx_name: "piankeanjingsss",  //微信名
 				},
 				// 负责人
 				director:{
-					avatar: "https://img.yzcdn.cn/vant/cat.jpeg",
-					name: "李王",
-					wx_name: "liwang"
+					// avatar: "https://img.yzcdn.cn/vant/cat.jpeg",
+					// name: "李王",
+					// wx_name: "liwang"
 				},
 				price:"",
 				// 激活码
@@ -76,6 +76,7 @@
 			}
 		},
 		components: {},
+		inject:['reload'],
 		mounted(){
 			this.onLoad();
 			this.onPrice();
@@ -113,7 +114,32 @@
 			},
 			// 提交激活码
 			onSubmit(values) {
-	      console.log('submit', values);
+	      var _this = this;
+      	this.MyAxios.post("/api/wechat/user/active_code",{
+	    		active_code:this.active_code
+				}).then(data => {
+					console.log(data);
+					if (data.code == 0) {
+						setTimeout(() =>{
+							this.$toast.success("激活成功！");
+						},2000)
+						setTimeout(() =>{
+							this.$router.push("profile");
+						},2500)
+					} else {
+						this.$toast.fail({
+							message:data.msg,
+							duration:5000,
+							onClose:function(){
+								this.$router.push("profile");
+							},
+						});
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				})
 	    },
 	    // 复制到粘贴板成功
 			onCopy: function (e) {

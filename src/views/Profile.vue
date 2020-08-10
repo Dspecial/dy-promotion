@@ -239,7 +239,7 @@
 				this.MyAxios.post("/api/wechat/user/index",{
 
 				}).then(data => {
-					console.log(data);
+					// console.log(data);
 					if (data.code == 0) {
 						this.profile = data.data.customer_info;
 						this.withdraw = data.data.money_data;

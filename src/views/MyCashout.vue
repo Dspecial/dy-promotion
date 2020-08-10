@@ -57,7 +57,7 @@
 		<van-popup v-model="showPicker" position="bottom">
 		  <van-picker
 		    show-toolbar
-		    value-key="type_text"
+		    value-key="text"
 		    :columns="cashOutAccount"
 		    @confirm="onConfirm"
 		    @cancel="showPicker = false"
@@ -86,19 +86,8 @@
 					{
 						type:3,
 						id:"wechat",
-						truename:"sam",
-						bank_code:"",
-						alipay: "",
-						type_text: "微信",
+						text: "微信",
 					},
-					// {
-					// 	type:1,
-					// 	id:"",
-					// 	truename:"sam",
-					// 	bank_code:"121212",
-					// 	alipay: "",
-					// 	type_text: "建行",
-					// },
 				],
 			}
 		},
@@ -111,7 +100,6 @@
 			onLoadBalance(){
 				this.MyAxios.post("/api/wechat/deposit/my_deposit",{
 				}).then(data => {
-					//console.log(data);
 					if (data.code == 0) {
 						this.balance = data.data;
 						this.balance2 = data.data;
@@ -126,11 +114,21 @@
 			onLoadBank(){
 				this.MyAxios.post("/api/wechat/deposit/index",{
 				}).then(data => {
-					console.log(data,'data');
-
-
+					//console.log(data,'data');
 					if (data.code == 0) {
-						this.cashOutAccount.push(...data.data);
+						var pickerOption = [];
+						data.data.map((item,index)=>{
+							if(item.type == 1){ // 银行卡
+								pickerOption.push(
+									Object.assign(item,{text:item.bank_name + ' (' + item.bank_code.slice(-4) + ') '})
+								)
+							}else if(item.type == 2){ // 支付宝
+								pickerOption.push(
+									Object.assign(item,{text:item.type_text + ' (' + item.alipay + ') '})
+								)
+							}
+						});
+						this.cashOutAccount.push(...pickerOption);
 					} else {
 						this.$notify({
               message: data.msg,
@@ -140,7 +138,7 @@
 				})
 			},
 			onConfirm(value) {
-	      this.cashOutText = value.type_text;
+	      this.cashOutText = value.text;
 	      this.logoType = value.type;
 	      this.cashOutId = value.id;
 	      this.showPicker = false;
@@ -149,13 +147,11 @@
 				this.number = this.balance2;
 			},
 			onSubmit(values) {
-	      // console.log('submit', values);
 	      var _this = this;
 				this.MyAxios.post("/api/wechat/deposit/apply_deposit",{
 					deposit_type:this.cashOutId,
 					deposit_money:this.number,
 				}).then(data => {
-					console.log(data);
 					if (data.code == 0) {
             this.$toast.loading({
 							message:"提交中...",
