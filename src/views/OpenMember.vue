@@ -18,7 +18,7 @@
 		</section>
 
 		<!-- notice -->
-<!-- 		<van-notice-bar class="mt-3 border-radius-4" 
+		<van-notice-bar class="mt-3 border-radius-4" style="display:none"
 			color="#fff" 
 			background="transparent" 
 			:scrollable="false">
@@ -44,7 +44,7 @@
 		    	</div>
 		  	</van-swipe-item>
 		  </van-swipe>
-		</van-notice-bar> -->
+		</van-notice-bar>
 
 		<section class="mt-4">
 			<h4 class="m-0 fs_18">开通会员&优势</h4>
@@ -72,7 +72,7 @@
 			</van-row>
 		</section>
 		
-		<div class="d-flex align-items-center">
+		<div class="d-flex align-items-center pb-5">
 			<div class="mr-2">
 				<van-field name="checkbox" class="my_checkbox" :border="false">
 				  <template #input>
@@ -88,7 +88,7 @@
 		</section>
 
 		<!-- 平台综合服务协议 -->
-		<van-dialog v-model="protocolDialog" :title="protocolTitle" class="protocol">
+		<van-dialog v-model="protocolDialog" :title="protocolTitle" class="protocol" @confirm="onDialogConfirm">
 	  	<Document :protocolid="protocolid"></Document>
 		</van-dialog>
 
@@ -127,7 +127,7 @@
 				// 负责人
 				director:{
 					// avatar: "https://img.yzcdn.cn/vant/apple-2.jpg",
-					// name: "抖推猫",
+					// name: "趣推",
 					// wx_name: "doutuimao"
 				},
 				swipeNotice:[
@@ -210,7 +210,6 @@
 				this.MyAxios.post("/api/wechat/user/index",{
 
 				}).then(data => {
-					console.log(data);
 					if (data.code == 0) {
 						if(data.data.agent_info){
 							this.director = data.data.agent_info;
@@ -249,6 +248,11 @@
 	    	//this.showDialog = false;
 	    	// 这里需要一个接口拿到负责人的信息
 	    	this.directorLoad();
+	    },
+	    
+	   	// 确认平台综合服务协议
+	    onDialogConfirm(){
+	    	this.checkbox = true;
 	    },
 		},
 	}

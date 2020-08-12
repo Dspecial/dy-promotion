@@ -52,14 +52,19 @@
 		<!-- 会员群 -->
 		<section class="mt-4">
 			<van-row :gutter="15" type="flex" justify="space-around" align="center">
-			  <van-col span="8">
-			  	<div class="fun_item text-center" 
-			  		v-clipboard:copy="membership"
-        		v-clipboard:success="onCopy"
-        		v-clipboard:error="onError">
+			  <van-col span="8" >
+			  	<div class="fun_item text-center" @click="addTeam">
 			  		<van-image width="45" height="45" :src="require('@/assets/images/fun_item1.png')" />
 			  		<span class="fs_14 d-block mt-2 font-weight-normal">会员群</span>
 			  	</div>
+			  	<!-- 会员群的二维码 -->
+					<van-dialog v-model="membershipShow" :show-cancel-button="false" :showConfirmButton="false" :closeOnClickOverlay="true" class="codeDialog">
+						<div class="text-center pt-3 pb-3">
+						  <img :src="membershipImg" />
+						  <p class="m-0 opacity-60 mt-2">长按图片识别客户微信</p>
+					  </div>
+					</van-dialog>
+
 			  </van-col>
 <!-- 			  <van-col span="8">
 			  	<router-link class="fun_item text-center" :to="'douyin'">
@@ -106,8 +111,7 @@
 												<h4 class="m-0 fs_16 text-truncate">{{item.d_name}}<van-tag class="ml-2 fs_12 font-weight-thin">{{tab.name}}</van-tag></h4>
 											</div>
 											<div class="mt-2">
-												<van-image class="mr-1" width="16" height="16" :src="require('@/assets/images/douyin.png')" />
-												<van-image width="16" height="16" :src="require('@/assets/images/toutiao.png')" />
+												<van-image width="16" height="16" :src="require('@/assets/images/douyin.png')" />
 											</div>
 										</div>
 									</div>
@@ -125,8 +129,8 @@
 								  	<p class="m-0 mt-3 fs_18">{{item.yes_shammoney}}</p>
 								  </van-col>
 								  <van-col span="8" class="text-center">
-								  	<h5 class="m-0 fs_14 font-weight-normal">总分佣比例</h5>
-								  	<p class="m-0 mt-3 fs_18">{{item.ad_extends}}</p>
+								  	<h5 class="m-0 fs_14 font-weight-normal">佣金比例</h5>
+								  	<p class="m-0 mt-3 fs_18">{{item.ad_extends}}%</p>
 								  </van-col>
 								  <van-col span="8" class="text-center" @click="downloadCode(1,item.id)" >
 								  	<van-icon class-prefix="icon" name="download4" color="#FE2C58" />
@@ -171,7 +175,7 @@
 
 		<!-- 新手课堂、会员 -->
 		<section class="index_hang">
-			<van-image width="55" height="57" :src="require('@/assets/images/hang_class.png')" />
+<!-- 			<van-image width="55" height="57" :src="require('@/assets/images/hang_class.png')" /> -->
 			<van-image width="59" height="57" :src="require('@/assets/images/hang_vip.png')" />
 		</section>
 
@@ -194,11 +198,14 @@
       	finishedPro: false,
       	proActive:0,
 
-				membership:"我是会员群的id",
+      	membershipShow:false, // 会员群显隐
+      	membershipImg:"", // 会员群图片
+				// membership:"我是会员群的id",
 				tabCard:[],
 				tabProList:[],
-				pCodeShow:false,
-				codeImg:"https://img.yzcdn.cn/vant/apple-3.jpg"
+
+				pCodeShow:false, // 推广码显隐
+				codeImg:"https://img.yzcdn.cn/vant/apple-3.jpg", // 推广码图片
 			}
 		},
 		components: {},
@@ -207,8 +214,6 @@
 			this.indexBanner();
 			// 公告列表
 			this.indexNoticeList();
-			// 会员群
-			this.addTeam();
 			// 产品列表分类
 			this.loadProCate();
 		},
@@ -255,18 +260,14 @@
 			toNoticeDetail(notice){
 				this.$router.push("/noticeDetail?id="+notice.id);
 			},
-			// 会员群
+			// 会员群,显示客服微信
 			addTeam(){
 				this.MyAxios.post("/api/wechat/base/get_base_info",{
-					id:40,
+					id:21,
 				}).then(data => {
 					if (data.code == 0) {
-						if(this.isEmpty(data.data.value)){
-							this.membership = "null";
-						}
-						else{
-							this.membership = data.data.value;
-						}
+						this.membershipShow = true;
+						this.membershipImg = data.data.value;
 					} else {
 						this.$notify({
               message: data.msg,
@@ -295,13 +296,13 @@
 			// 加载产品
 			onLoadPro(){
 				this.pagePro++; // 分页数加一
-	     	this.loadProData(this.proActive); // 调用方法,请求数据
+	     	this.loadProData(); // 调用方法,请求数据
 			},
 			// 产品列表
-			loadProData(cate){
+			loadProData(){
 				this.MyAxios.post("/api/wechat/products/index",{
 					page:this.pagePro,
-					cate_id:cate,
+					cate_id:this.proActive,
 				}).then(data => {
 					if (data.code == 0) {
 						/**
@@ -339,7 +340,8 @@
 			},
 			// tab切换
 			onTabClick(name,title){
-				this.loadProData(name)
+				this.proActive = name;
+				this.loadProData(); // 调用方法,请求数据
 			},
 			goProductDetail(pro){
 				this.$router.push({
@@ -391,5 +393,7 @@
 </script>
 
 <style>
-
+	.proList .van-tabs__wrap{
+		display: none;
+	}
 </style>

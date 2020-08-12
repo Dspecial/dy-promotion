@@ -98,7 +98,6 @@
 				this.MyAxios.post("/api/wechat/course/index",{
 
 				}).then(data => {
-					console.log(data.data);
 					if (data.code == 0) {
 						this.weekly = data.data.share_list;
 						this.higher = data.data.high_list;

@@ -108,8 +108,8 @@
 		  />
 		</van-popup>
 		
-		<!-- 《灵活用工平台综合服务协议》 -->
-		<van-dialog v-model="protocolDialog" :title="protocolTitle" class="protocol">
+		<!-- 用户服务协议 -->
+		<van-dialog v-model="protocolDialog" :title="protocolTitle" class="protocol" @confirm="onDialogConfirm">
 	  	<Document :protocolid="protocolid"></Document>
 		</van-dialog>
 	</div>
@@ -141,8 +141,8 @@
 				],
 				mobile:'',
 				checkbox:false,
-				protocolTitle:"灵活用工平台综合服务协议",
-				protocolid:"25",
+				protocolTitle:"用户服务协议",
+				protocolid:"18",
 				protocolDialog:false,
 			}
 		},
@@ -156,7 +156,6 @@
 	    // tab切换
     	onTabClick(name,title){
 				this.submitType = name + 1;
-				console.log(this.submitType);
 			},
 			// 获取银行列表
 			loadBank(){
@@ -184,7 +183,7 @@
 	    	}else{
 	    		this.$dialog.confirm({
 					  title: '温馨提示',
-					  message: '请先阅读并同意《灵活用工平台综合服务协议》',
+					  message: '请先阅读并同意《' + protocolTitle +'》',
 					  showCancelButton:false,
 					})
 	    	}
@@ -217,6 +216,12 @@
 					}
 				})
 	    },
+
+	    // 确认用户服务协议
+	    onDialogConfirm(){
+	    	this.checkbox = true;
+	    },
+
 		},
 	}
 </script>

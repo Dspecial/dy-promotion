@@ -50,7 +50,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.documents-container div,.documents-container table{
 		color:#fff!important;
 		background: transparent!important;
@@ -59,5 +59,17 @@
 	.documents-container span,.documents-container p{
 		color:#fff!important;
 		background: transparent!important;
+	}
+
+	.van-dialog{
+		.documents-container div,.documents-container table{
+			color:#000!important;
+			background: transparent!important;
+			width: 100%!important;
+		}
+		.documents-container span,.documents-container p{
+			color:#000!important;
+			background: transparent!important;
+		}
 	}
 </style>

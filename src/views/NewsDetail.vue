@@ -43,7 +43,7 @@
 				id:"",
 				title:"我是资讯详细页面",
 				image:require("@/assets/images/tab_per_active.png"),
-				author:"抖推猫",
+				author:"趣推",
 				createtime:"2020-08-05",
 				content:"<p>大家好才是真的好</p>",
 

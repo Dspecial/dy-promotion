@@ -33,7 +33,7 @@
 				    </template>
 				    <!-- 内容 -->
 					  <div class="p_relative" @click="playVideo(question.answer)">
-					    <img v-lazy="question.postimage"/>
+					    <img v-lazy="question.image"/>
 					    <div class="p_absolute ban_paly">
 					    	<van-icon name="play" />
 					    </div>

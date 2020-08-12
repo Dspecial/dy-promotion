@@ -85,7 +85,6 @@
 	    	this.MyAxios.post("/api/wechat/user/team",{
 
 				}).then(data => {
-					console.log(data);
 					if (data.code == 0) {
 						this.teamTabCard[0].teamList = data.data.already_bind_list;
 						this.teamTabCard[1].teamList = data.data.vip_list;

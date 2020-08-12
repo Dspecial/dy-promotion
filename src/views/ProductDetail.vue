@@ -50,9 +50,9 @@
 
 		<!-- 抖音小程序推广分佣比例 -->
 		<section class="mt-4">
-			<h4 class="m-0 fs_18">抖音小程序推广分佣比例</h4>
+			<h4 class="m-0 fs_18">抖音小程序推广佣金比例</h4>
 			<div class="mt-3 bg_dark-400 pl-2 pr-2 pt-3 pb-3">
-				<van-row>
+				<van-row type="flex" justify="space-around">
 					<van-col :span="6" class="text-center">
 						<h5 class="m-0 fs_16">广告分成</h5>
 						<p class="fs_12 opacity-60 m-0 mt-3 font-weight-normal">预估eCPM</br>95%分成</p>
@@ -61,11 +61,11 @@
 						<h5 class="m-0 fs_16">{{product_info.zitui_extends}}%</h5>
 						<p class="fs_12 opacity-60 m-0 mt-3 font-weight-normal">自己拍抖音</br>赚佣金比例</p>
 					</van-col>
-					<van-col :span="6" class="text-center">
+					<van-col :span="6" class="text-center" style="display: none;">
 						<h5 class="m-0 fs_16">{{product_info.zhitui_extends}}%</h5>
 						<p class="fs_12 opacity-60 m-0 mt-3 font-weight-normal">直推团队拍</br>抖音佣金比例</p>
 					</van-col>
-					<van-col :span="6" class="text-center">
+					<van-col :span="6" class="text-center" style="display: none;">
 						<h5 class="m-0 fs_16">{{product_info.jiantui_extends}}%</h5>
 						<p class="fs_12 opacity-60 m-0 mt-3 font-weight-normal">间接团队拍</br>抖音佣金比例</p>
 					</van-col>
@@ -124,7 +124,7 @@
 			</div>
 
 			<!-- 团队收益 -->
-<!-- 			<div class="mt-4 promotion-tabs">
+			<div class="mt-4 promotion-tabs" style="display: none;">
 				<van-tabs type="card" @click="onTabClick">
 				  <van-tab v-for="(tab,index) in dataTabCard" :key="index" :title="tab.title" class="proDetail_tab_content">
 
@@ -161,7 +161,7 @@
 				  	</div>	
 				  </van-tab>
 				</van-tabs>
-			</div> -->
+			</div>
 		</section>
 	</div>
 </template>

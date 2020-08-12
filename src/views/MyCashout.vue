@@ -77,8 +77,8 @@
 				balance2:"",
 				showPicker: false,
 				logoType:"",// 1是银行卡；2是支付宝；其余是微信
-				cashOutText:'微信', // 默认微信提现
-				cashOutId:"wechat", // 默认微信提现
+				cashOutText:'', // 默认微信提现:微信
+				cashOutId:"", // 默认微信提现:wechat
 				wechatLogo:require('@/assets/images/wechat.png'),
 				alipayLogo:require("@/assets/images/Alipay.png"),
 				bankLogo:require("@/assets/images/bank.png"),
@@ -114,7 +114,6 @@
 			onLoadBank(){
 				this.MyAxios.post("/api/wechat/deposit/index",{
 				}).then(data => {
-					//console.log(data,'data');
 					if (data.code == 0) {
 						var pickerOption = [];
 						data.data.map((item,index)=>{

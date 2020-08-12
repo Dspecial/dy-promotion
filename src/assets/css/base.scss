@@ -3,7 +3,7 @@
 * @Email: dxxtalking@163.com
 * @Date:   2020-07-14 13:29:54
 * @Last Modified by:   dxx
-* @Last Modified time: 2020-08-10 14:49:09
+* @Last Modified time: 2020-08-11 14:57:54
 */
 @charset "UTF-8";
 /*css 初始化 */
@@ -1466,7 +1466,7 @@ h1,h2,h3,h4,h5,h6{
       color: #fff;
     }
     .van-field__control::placeholder{
-      color:#474D6B;
+      color:#bbb;
     }
     .van-field__control{
       color:#fff;
@@ -1670,7 +1670,9 @@ h1,h2,h3,h4,h5,h6{
 /*协议*/
 .protocol{
   .van-dialog__content{
-    max-height: 50%;
+    max-height: 400px;
+    overflow: auto;
+    padding:0 1.25rem;
   }
 }
 

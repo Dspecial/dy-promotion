@@ -62,7 +62,6 @@
 				this.MyAxios.post("/api/wechat/deposit/deposit_record",{
 
 				}).then(data => {
-					console.log(data);
 					if (data.code == 0) {
 						this.cashout = data.data.my_deposit_sum;
 						this.remark = data.data.remark;
