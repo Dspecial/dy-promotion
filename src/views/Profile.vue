@@ -7,7 +7,8 @@
 		  </van-col>
 		  <van-col span="14">
 		  	<div class="fs_18 font-weight-normal">{{profile.name}}</div>
-		  	<div class="fs_12 font-weight-normal mt-2">手机号：<span>{{profile.mobile}}</span></div>
+		  	<div class="fs_12 font-weight-normal mt-2 s5555" v-if="isEmpty(profile.mobile)" @click="bindMobile">手机号：<span>请绑定手机号</span></div>
+		  	<div class="fs_12 font-weight-normal mt-2" v-else>手机号：<span>{{profile.mobile}}</span></div>
 		  </van-col>
 		  <van-col class="text-center" @click="showQR">
 		  	<van-icon name="qr" size="36"/>
@@ -191,7 +192,34 @@
 			  <img :src="dialogImgUrl" />
 			  <p class="m-0 opacity-60 mt-2">长按图片保存到相册</p>
 		  </div>
-		</van-dialog>	
+		</van-dialog>
+
+		<!-- 绑定手机号 -->
+		<van-dialog v-model="dialogMobileShow" title="请绑定手机号" :show-cancel-button="false" :showConfirmButton="false" :closeOnClickOverlay="true" class="codeDialog">
+			<div class="text-center p-3">
+			  <van-form @submit="submitMobile" class="mt-3 wxName" :show-error-message="false">
+					<!-- 允许输入数字，调起带符号的纯数字键盘 -->
+					<van-field v-model="dialogMobile" name="手机号" type="number" placeholder="请填写手机号"
+						:rules="[{ required: true, message: '请填写手机号' }]" border>
+					</van-field>
+
+					<van-field
+					  v-model="dialogsms"
+					  center
+					  clearable
+					  placeholder="请输入短信验证码"
+					>
+					  <template #button>
+					  	<van-button  native-type="button" type="primary" @click="getsmscode" :disabled="attcode" v-if="showbtn">获取验证码</van-button>
+        			<van-button  native-type="button" type="default" class="tsbtn" v-else>{{code_ts}}</van-button>
+					  </template>
+					</van-field>
+
+					<van-button size="large" color="#FE2C58" class="border-radius-4 fs_16 w-75 mt-3" native-type="submit">
+					确认</van-button>
+				</van-form>
+		  </div>
+		</van-dialog>
 
 	</div>
 </template>
@@ -203,7 +231,18 @@
 			return {
 				// 个人信息
 				profile:{
+					// avatar: "https://img.yzcdn.cn/vant/apple-2.jpg",
+					// name: "暂无",
+					// wx_name: "暂无",
 				},
+
+				dialogMobileShow:false,
+				dialogMobile:"",
+				dialogsms:"",
+        attcode: true,  //点击获取验证码按钮判断
+        showbtn: true, // 展示获取验证码或倒计时按钮判断
+        code_ts: '获取验证码', //倒计时提示文字
+        sec: 60, // 倒计时秒数
 
 				dialogImgShow:false,
 				dialogImgTitle:"",
@@ -228,18 +267,30 @@
 		mounted(){
 			this.onLoad();
 		},
+		watch: {
+	    dialogMobile: function (value) {
+        var reg = /\b1[3456789]\d{9}\b/g;
+        let val = reg.test(value);
+        if (val) {
+          this.attcode = false
+        } else {
+          this.attcode = true
+        }
+	    }
+		},
 		methods:{
 			// 获取个人信息
 			onLoad(){
 				this.MyAxios.post("/api/wechat/user/index",{
 
 				}).then(data => {
+					// console.log(data);
 					if (data.code == 0) {
 						this.profile = data.data.customer_info;
 						this.withdraw = data.data.money_data;
 						this.director = data.data.agent_info;
 						if(this.isEmpty(this.profile.mobile)){
-							this.profile.mobile = "请绑定手机号"
+							this.bindMobile();
 						};
 					} else {
 						this.$notify({
@@ -248,6 +299,55 @@
             });
 					}
 				})
+			},
+			// 绑定手机号
+			bindMobile(){
+				this.dialogMobileShow = true;
+			},
+			// 发送验证码
+			getsmscode(){
+				var timer = setInterval(() => {
+	        this.sec = this.sec-1
+	        this.code_ts = this.sec + 'S后重试'
+	        this.showbtn = false;
+	        if (this.sec === 0) {
+	          clearInterval(timer)
+	          this.sec = 60
+	          this.code_ts = this.sec + 'S后重试'
+	          this.showbtn = true
+	        }
+		    }, 1000);
+
+				this.MyAxios.post("/api/wechat/base/send_code",{
+					mobile:this.dialogMobile
+				}).then(data => {
+					if (data.code == 0) {
+						this.$toast.success(data.msg);
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				});
+			},
+			// 提交手机号
+			submitMobile(){
+				this.MyAxios.post("/api/wechat/user/bind_mobile",{
+					phone:this.dialogMobile,
+					code:this.dialogsms,
+				}).then(data => {
+					console.log(data);
+					if (data.code == 0) {
+						this.$toast.success(data.msg);
+						this.dialogMobileShow = true;
+					} else {
+						this.$notify({
+              message: data.msg,
+              type: 'warning'
+            });
+					}
+				});
 			},
 			// 关注公众号
 			showQR(){
@@ -269,7 +369,6 @@
 			// 绑定微信号
 			bindWeChat(){
 				this.MyAxios.post("/api/wechat/user/edit_wx",{
-					//token:"",
 					wx_name:this.wxName,
 				}).then(data => {
 					if (data.code == 0) {
