@@ -61,7 +61,7 @@
 					<van-dialog v-model="membershipShow" :show-cancel-button="false" :showConfirmButton="false" :closeOnClickOverlay="true" class="codeDialog">
 						<div class="text-center pt-3 pb-3">
 						  <img :src="membershipImg" />
-						  <p class="m-0 opacity-60 mt-2">长按图片识别客户微信</p>
+						  <p class="m-0 opacity-60 mt-2">长按图片识别客服微信</p>
 					  </div>
 					</van-dialog>
 

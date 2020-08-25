@@ -3,7 +3,7 @@
 * @Email: dxxtalking@163.com
 * @Date:   2020-07-14 13:29:54
 * @Last Modified by:   dxx
-* @Last Modified time: 2020-08-11 14:57:54
+* @Last Modified time: 2020-08-19 11:02:34
 */
 @charset "UTF-8";
 /*css 初始化 */
@@ -1767,4 +1767,10 @@ h1,h2,h3,h4,h5,h6{
       height: 30px;
     }
   }
+}
+
+/*推广海报*/
+.posterDialog img{
+  width: 92%;
+  height: auto;
 }
